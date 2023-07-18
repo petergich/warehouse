@@ -8,7 +8,7 @@ def Login(request):
 
   data = user(username=username,password=password) 
   return render('dashboard.html',request)
- return render(request,'login.html')
+ return render(request,'auth-login-basic.html')
 
 def Dashboard(request):
- return render()
+ return render(request,'dashboard.html')
