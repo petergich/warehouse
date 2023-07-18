@@ -11,7 +11,7 @@ class Purchase_Orders(models.Model):
 
 class SKUs(models.Model):
     Description=models.CharField(max_length=50)
-    Type=models.CharField(max_length=50)
+    Type=models.CharField(max_length=50,null=True,blank=True)
     Price=models.IntegerField(validators=[MinValueValidator(0)])
     Packaging=models.CharField(max_length=50)
     Quantity=models.IntegerField(validators=[MinValueValidator(0)])
@@ -22,6 +22,11 @@ class Capex(models.Model):
     capex_no=models.CharField(max_length=50)
     def __str__(self):
         return self.capex_no
+class user(models.Model):
+    username=models.CharField(max_length=50)
+    password=models.CharField(max_length=50)
+    def __str__(self):
+        return self.username
     
 
     
