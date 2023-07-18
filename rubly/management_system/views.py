@@ -1,3 +1,14 @@
 from django.shortcuts import render
+from .models import user
+# Login Module.
+def Login(request):
+ if  request.method == "POST":
+  username = request.post['username']
+  password = request.post['password']
 
-# Create your views here.
+  data = user(username=username,password=password) 
+  return render('dashboard.html',request)
+ return render()
+
+def Dashboard(request):
+ return render()
