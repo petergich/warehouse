@@ -1,17 +1,23 @@
 from django.shortcuts import redirect, render
-from .models import user
+from .models import User
 
-# Login Module.
+# Login Module
 def Login(request):
- if  request.method == "POST":
-  username = request.POST.get('username')
-  password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
 
-  data = user(username=username,password=password) 
-  data.save()
-  return redirect("Dashboard")
- return render(request,'auth-login-basic.html')
+        user = User.objects.filter(username=username)
+        pwd= User.objects.filter(password=password)
+        if user:
+            if pwd:
+             return redirect('Dashboard')
+        else:            
+            return redirect('Login')            
+    return render(request, 'auth-login-basic.html')
 
 
+
+# Dashboard Module
 def Dashboard(request):
- return render(request,'dashboard.html')
+    return render(request, 'dashboard.html')
