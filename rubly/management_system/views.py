@@ -19,5 +19,5 @@ def Login(request):
 
 
 # Dashboard Module
-def Dashboard(request):
+def Dashboard(request): 
     return render(request, 'dashboard.html')
