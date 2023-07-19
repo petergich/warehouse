@@ -18,6 +18,19 @@ def Login(request):
     return render(request, 'auth-login-basic.html')
 
 
+<<<<<<< Updated upstream
 # Dashboard Module
 def Dashboard(request): 
     return render(request, 'dashboard.html')
+=======
+def Dashboard(request):
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+ return render(request,'capex-order.html')
+>>>>>>> Stashed changes
+=======
+ return render(request,'capex-order.html')
+>>>>>>> Stashed changes
+=======
+ return render(request,'capex-order.html')
+>>>>>>> Stashed changes

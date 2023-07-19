@@ -156,7 +156,7 @@
                 <div class="mb-3 row">
                   <label for="html5-date-input" class="col-md-2 col-form-label">Date</label>
                   <div class="col-md-10">
-                    <input class="form-control" type="date" value="" id="html5-date-input" />
+                    <input class="date-field form-control" type="date" value="" id="html5-date-input" />
                   </div>
               </div>
               <!-- /Search -->
@@ -215,7 +215,7 @@
                             </div>
                           </div>
                           <span class="fw-semibold d-block mb-1">Opening stock</span>
-                          <h5 class="card-title mb-5">Ksh 12,628</h5>
+                          <h5 class="card-title mb-5">Ksh <div class='opening-stock-table'></div></h5>
                           <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
                         </div>
                       </div>
@@ -233,7 +233,7 @@
                             </div>
                           </div>
                           <span>Closing stock</span>
-                          <h5 class="card-title text-nowrap mb-1">Ksh 4,679</h5>
+                          <h5 class="card-title text-nowrap mb-1">Ksh  <div class='closing-stock-table'></div></h5>
                           <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
                         </div>
                       </div>
@@ -393,6 +393,8 @@
 
     <!-- Main JS -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/stockview.js' %}"></script>
+
 
     <!-- Page JS -->
     <script src="{% static 'js/dashboards-analytics.js'%}"></script>
