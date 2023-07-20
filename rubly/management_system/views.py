@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
-# from .models import User
-# from django.contrib.auth.models import User
-# from django.contrib.auth.views import LoginView
-# from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from django.views import View
+import json
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 
 def Login(request):
@@ -24,24 +25,6 @@ def Login(request):
         return render(request, 'auth-login-basic.html')
 
 
-# Login Module
-# def Login(request):
-#     if request.method == "POST":
-#        if request.method == "POST":
-#         username = request.POST['username']
-#         password = request.POST['password']
-
-#         check_user = User.objects.filter(username=username)
-#         pwd = User.objects.filter(password=password)
-#         if check_user:
-#             if pwd:
-#                 return redirect('Dashboard')
-#         else:
-#             return redirect('Login')
-#     # user =User.objects.get_or_create()
-#     return render(request, 'auth-login-basic.html')
-
-
 # Dashboard Module
 @login_required(login_url="/login/")
 def Dashboard(request):
@@ -58,3 +41,21 @@ def Logout(request):
         messages.success(request, 'You are now logged out')
         return redirect('Login')
     return redirect('Login')
+
+
+# Dashboard-date Module
+class dashboard(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        date = data['date']
+        print(date)
+        return JsonResponse({'date': data['date']})
+
+
+# Stock release module
+class CapexOut(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        search = data['sku']
+        print(search)
+        return JsonResponse({'search': data['sku']})
