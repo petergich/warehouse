@@ -128,6 +128,8 @@
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
+                <div data-i18n="Analytics"> <a href="{% url 'Logout' %}">Logout</a></div>
+               
               </a>
             </li>
 
@@ -178,7 +180,9 @@
                     <div class="d-flex align-items-end row">
                       <div class="col-sm-7">
                         <div class="card-body">
-                          <h5 class="card-title text-primary">Congratulations John! 🎉</h5>
+                          
+                          <h5 class="card-title text-primary">Congratulations {{user.username}}  🎉</h5>
+                          
                           <p class="mb-4">
                             You have done <span class="fw-bold">72%</span> more Closing stock today. Do you want to check out some goods from warehouse.
                           </p>
