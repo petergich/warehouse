@@ -28,12 +28,8 @@ def Login(request):
 # Dashboard Module
 @login_required(login_url="/login/")
 def Dashboard(request):
-    # context= {}
+    # context= 
     return render(request, 'dashboard.html')
-
-# def Dashboard(request):
-#  return render(request,'capex-order.html')
-
 
 def Logout(request):
     if request.method == 'POST':
