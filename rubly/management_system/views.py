@@ -23,7 +23,7 @@ def Login(request):
     return render(request, 'auth-login-basic.html')
 
 
-<<<<<<< Updated upstream
+
 
 # Dashboard Module
 # def Dashboard(request): 
@@ -31,7 +31,7 @@ def Login(request):
 
 def Dashboard(request):
  return render(request,'capex-order.html')
-=======
+
  
 # Dashboard Module
 @login_required(login_url='Login')
@@ -58,4 +58,4 @@ class CapexOut(View):
 
  
  
->>>>>>> Stashed changes
+
