@@ -20,7 +20,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon/favicon.ico'%}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -115,11 +115,17 @@
             <li class="menu-item active">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-                <div data-i18n="Analytics"> <a href="{% url 'Logout' %}">Logout</a></div>
-               
+                <div data-i18n="Analytics">Dashboard</div>               
               </a>
-            </li>
+            </li> <ul class="menu-inner py-1">
+              <!-- Dashboard -->
+              <li class="menu-item active">
+                <a href="{% url 'Logout' %}" class="menu-link">
+                  <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                  <div data-i18n="Analytics">Logout</div>               
+                </a>
+              </li>
+
 
             <!-- Layouts -->
            
@@ -183,6 +189,20 @@
                           {% comment %} <a href="{% url 'capex-out' %}" class="btn btn-sm btn-outline-primary">release goods</a> {% endcomment %}
                         </div>
                       </div>
+                      {% for sku in skus  %}  
+                      <div class="col-sm-7">
+                        <div class="card-body">
+                          
+                          <h5 class="card-title text-primary">{{sku.Description}}  🎉</h5>
+                          
+                          <p class="mb-4">
+                            {{ sku.Type }} <span class="fw-bold">{{ sku.Quantity }}</span> {{ sku.Price }}
+                          </p>
+
+                           {% comment %} <a href="{% url 'capex-out' %}" class="btn btn-sm btn-outline-primary">release goods</a>  {% endcomment %}
+                        </div>
+                      </div>
+                     {%  endfor %}  
                       <div class="col-sm-5 text-center text-sm-left">
                         <div class="card-body pb-0 px-0 px-md-4">
                           <img
