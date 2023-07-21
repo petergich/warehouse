@@ -58,15 +58,6 @@ def Logout(request):
 
 
  
-# Dashboard Module
-@login_required(login_url='Login')
-def Dashboard(request):
- 
-# Dashboard Module
-@login_required(login_url='Login')
-def Dashboard(request):
-    return render(request,'dashboard.html')
-
 # Dashboard-date Module
 class dashboard(View):
 
