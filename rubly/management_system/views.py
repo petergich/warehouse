@@ -1,11 +1,18 @@
+
 from django.shortcuts import redirect, render
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from django.shortcuts import render,redirect
 from django.views import View
 import json
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+
+
+
+from django.contrib.auth.decorators import login_required
 
 
 def Login(request):
@@ -23,6 +30,7 @@ def Login(request):
             return redirect('Login')
     else:
         return render(request, 'auth-login-basic.html')
+
 
 
 # Dashboard Module
@@ -43,9 +51,22 @@ def Logout(request):
 class dashboard(View):
     def post(self, request):
         data = json.loads(request.body)
+
+ 
+# Dashboard Module
+@login_required(login_url='Login')
+def Dashboard(request):
+    return render(request,'dashboard.html')
+
+# Dashboard-date Module
+class dashboard(View):
+
+    def post(self, request):
+        data = json.loads(request.body) 
         date = data['date']
         print(date)
         return JsonResponse({'date': data['date']})
+
 
 
 # Stock release module
@@ -55,3 +76,14 @@ class CapexOut(View):
         search = data['sku']
         print(search)
         return JsonResponse({'search': data['sku']})
+
+#Stock release module
+class CapexOut(View):
+     def post(self, request):
+        data = json.loads(request.body) 
+        search = data['sku']
+        print(search)
+        return JsonResponse({'search': data['sku']})
+
+ 
+ 
