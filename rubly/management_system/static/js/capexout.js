@@ -3,13 +3,14 @@ console.log(searchField);
 searchField.addEventListener('keyup', (event) => {
   const search = event.target.value;  
   console.log(search);
-    if  (search !== ''){
+    if  (search != '' ){
     fetch('/capexout', {
         method: 'POST',
         body: JSON.stringify({sku: search}),
     }).then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // for (let i = 0; i < search.length;i++)
+        //     console.log(JSON.stringify(search.skus));
         // const table = document.querySelector('.capexout-table');
         // for (let i = 0; i < data.length; i++)
         //     table.innerHTML = '<p>${data.sku}</p>';

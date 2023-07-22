@@ -70,17 +70,14 @@ class dashboard(View):
 
 
 
-# Stock release module
-class CapexOut(View):
-    def post(self, request):
-        data = json.loads(request.body)
 #Stock release module
 class CapexOut(View):
      def post(self, request):
         data = json.loads(request.body) 
         search = data['sku']
-        print(search)
-        return JsonResponse({'search': data['sku']})
+        skus = SKUs.objects.filter(Description__contains= search).values()
+        return JsonResponse({'search': list(skus)})
+
 
 
  
