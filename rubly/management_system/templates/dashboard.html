@@ -15,7 +15,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics </title>
+    <title>Warehouse</title>
 
     <meta name="description" content="" />
 
@@ -75,7 +75,7 @@
                     <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
                       <g id="Icon" transform="translate(27.000000, 15.000000)">
                         <g id="Mask" transform="translate(0.000000, 8.000000)">
-                          <mask id="mask-2" fill="white"
+                          <mask id="mask-2" fill="white">
                             <use xlink:href="#path-1"></use>
                           </mask>
                           <use fill="#696cff" xlink:href="#path-1"></use>
@@ -132,6 +132,48 @@
                   <div data-i18n="Analytics">Logout</div>               
                 </a>
               </li>
+              <div class="row">
+                <div class="col-lg-6 col-md-12 col-6 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="card-title d-flex align-items-start justify-content-between">
+                        <div class="avatar flex-shrink-0">
+                          <img
+                            src="{% static 'img/icons/unicons/chart-success.png' %}"
+                            alt="chart success"
+                            class="rounded"
+                          />
+                        </div>
+                        <div class="col-md-10">
+                          <input name = 'date' class="date-field form-control opening_stock" type="date" value="date" id="html5-date-input" />
+                        </div>
+                      </div>
+                      <span class="fw-semibold d-block mb-1">Opening stock  Date</span>
+                     
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-6 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="card-title d-flex align-items-start justify-content-between">
+                        <div class="avatar flex-shrink-0">
+                          <img
+                            src="{% static 'img/icons/unicons/wallet-info.png' %}"
+                            alt="Credit Card"
+                            class="rounded"
+                          />
+                        </div>
+                        <div class="col-md-10">
+                          <input name = 'date' class="date-field form-control closing_stock" type="date" value="date" id="html5-date-input" placeholder = '' />
+                        </div>
+                      </div>
+                      <span>Closing stock Date</span>
+          
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
             <!-- Layouts -->
@@ -155,9 +197,9 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <!-- Search -->
-              <div class="navbar-nav align-items-center">
+              <div class="navbar-nav align-items-center ">
                 <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
+                  <i class="bx bx-search fs-4 lh-0" onclick = myfunc1() ></i>
                   <input
                     type="text"
                     class="form-control border-0 shadow-none search_input"
@@ -165,13 +207,28 @@
                     aria-label="Search..."
                   />
                 </div>
+                
               </div>
+             
+              
+              
               
               <!-- /Search -->
 
               
             </div>
+            
+            
           </nav>
+          <div class="results container-xxl">
+          <div class = 'rowadrop' id="hidden">
+            <ul id = 'ul' class = 'ul-table' >
+
+            </ul>
+            
+          </div>
+        </div>
+           
 
           <!-- / Navbar -->
 
@@ -182,53 +239,9 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <div class="col-lg-4 col-md-4 order-1">
-                <div class="row">
-                  <div class="col-lg-6 col-md-12 col-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                          <div class="avatar flex-shrink-0">
-                            <img
-                              src="{% static 'img/icons/unicons/chart-success.png' %}"
-                              alt="chart success"
-                              class="rounded"
-                            />
-                          </div>
-                          <div class="col-md-10">
-                            <input name = 'date' class="date-field form-control opening_stock" type="date" value="date" id="html5-date-input" />
-                          </div>
-                        </div>
-                        <span class="fw-semibold d-block mb-1">Opening stock</span>
-                        <h5 class="card-title mb-1">Ksh <div class='opening-stock-table'></div></h5>
-                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 col-md-12 col-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                          <div class="avatar flex-shrink-0">
-                            <img
-                              src="{% static 'img/icons/unicons/wallet-info.png' %}"
-                              alt="Credit Card"
-                              class="rounded"
-                            />
-                          </div>
-                          <div class="col-md-10">
-                            <input name = 'date' class="date-field form-control closing_stock" type="date" value="date" id="html5-date-input" />
-                          </div>
-                        </div>
-                        <span>Closing stock</span>
-                        <h5 class="card-title text-nowrap mb-1">Ksh  <div class='closing-stock-table'></div></h5>
-                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
               <div class="row">
-                
                 {% for sku in skus  %} 
                 {%if sku.Quantity != None%}
                 <div class="col-lg-8 mb-4 order-0">
@@ -238,22 +251,20 @@
                     <div class="d-flex align-items-end row">
                       <div class="col-sm-7">
                         <div class="card-body">
-                        <h5 class="card-title text-primary"><span> Description: {{sku.Description}} </span> 🎉</h5>
-                          <p class="mb-1">
-                            Type :{{ sku.Type }}  
+                        <h5 class="card-title text-primary fw-bold"><span style="color:black"> {{sku.Description}} </span> </h5>
+                          <p class="mb-1 fw-bold" style='color:black;'>
+                            Purchase order :<span style="color:blue">{{ sku.Purchase_Order }}</span>  
                           </p>
-                          <h5 class= 'text-primary'> Price: Ksh {{ sku.Price }} </h5>
-                          <small class="fw-bold"> Quantity(available): {{ sku.Quantity }}</small>
-                          <br>Enter quantity:
+                          <p class= 'text-primary fw-bold'  > <span style="color:black">Price:</span><span style="color:blue"> Ksh {{ sku.Price }}</span> </p>
+                          <p class="fw-bold"> <span style="color:black">Quantity(available):</span> <span style="color:blue">{{ sku.Quantity }}<span></p>
+                          <br><span style="color:black">Quantity:</span>
                           <div class="col-md-2">
-                            <input class="form-control" type="number" value="" id="html5-number-input" placeholder="0" />
+                            <input class="form-control" type="number" value="" id="{{sku.id}}" placeholder="0" />
                           </div>
                             <a
                               href="#"
-                              class="btn btn-danger btn-buy-now"
-                              >Add to checkout</a
-                            >
-                        </div>
+                              class="button btn btn-primary btn-buy-now" onclick = "myfunc2({{sku.id}})"min="1" required>Add to checkout</a>
+                                  </div>
                       </div>
               
                       
@@ -263,31 +274,25 @@
                 </div>
                 {% endif %}
                 {%  endfor %}
-              </div>
-            
-                <!-- Footer --!>
-            
-                <footer class="content-footer footer bg-footer-theme">
-              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                <div class="mb-2 mb-md-0">
-                  ©
-                  <script>
-                    document.write(new Date().getFullYear());
-                  </script>
-                  , made with ❤️ 
-                </div>
-                
-                  <a
-                    href="#"
-                    class="footer-link me-4"
-                    >Support</a
-                  >
+                <div class="col-lg-3 mb-4 order-0">
+                  <div class='card headings'>
+                    <h1>YOUR ORDER</h1>
+                    <table border="1">
+                      <!-- Table header -->
+                      <thead>
+                        <tr>
+                          <th>SKUs</th>
+                          <th>Amount</th>
+                          <th><button class="btn btn-secondary">delete all</button></th>
+                        </tr>
+                      </thead>
+                      <tbody id="mytable">
+                      </tbody>
+                 </div>
                 </div>
               </div>
-            </div>
             
-            </footer>
-            <!-- / Footer -->
+               
 
             <div class="content-backdrop fade"></div>
           </div>
@@ -304,8 +309,8 @@
     <div class="buy-now">
       <a
         href="#"
-        class="btn btn-danger btn-buy-now"
-        >Contact creators</a
+        class="btn btn-success btn-buy-now"
+        >Checkout</a
       >
     </div>
 

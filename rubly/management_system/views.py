@@ -40,13 +40,19 @@ def Login(request):
 # Dashboard Module
 @login_required(login_url="/login/")
 def Dashboard(request):
-    try:
-        skus = SKUs.objects.all()    
-    except SKUs.DoesNotExist:
-        skus = get_object_or_404
-    # sku = {{'Description':'router microtic'},{'Type':'Gateway'},{'Quantity',10},{'Price': 3000}}
-    for sku in skus:
-            print(sku)
+    
+    if 'search' in request.GET:
+        id = request.GET['search']
+        obj = SKUs.objects.filter(id=id)
+        # print (obj)
+        return render(request, 'dashboard.html',{'skus': obj}) 
+    if 'search1' in request.GET:
+        id = request.GET['search1']
+        obj = SKUs.objects.filter(Description__contains= id)
+        print (obj)
+        return render(request, 'dashboard.html',{'skus': obj}) 
+    
+    skus = SKUs.objects.all()
     return render(request, 'dashboard.html',{'skus': skus})
 
 def Logout(request):
