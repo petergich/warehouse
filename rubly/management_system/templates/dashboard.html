@@ -121,7 +121,7 @@
               <!-- Dashboard -->
               
               <li class="menu-item active">
-                <a href="http://127.0.0.1:8000/admin/" target="_blank" class="menu-link">
+                <a href="http://192.168.1.57:8000/admin/" target="_blank" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Manage stock</div>               
                 </a>
@@ -243,8 +243,8 @@
               </div>
               <div class="row">
                 {% for sku in skus  %} 
-                {%if sku.Quantity != None%}
-                <div class="col-lg-8 mb-4 order-0">
+                {%if sku.Quantity > 0 %}
+                <div class="col-lg-8 mb-4 order- ">
                    
 
                   <div class="card">
@@ -259,11 +259,15 @@
                           <p class="fw-bold"> <span style="color:black">Quantity(available):</span> <span style="color:blue">{{ sku.Quantity }}<span></p>
                           <br><span style="color:black">Quantity:</span>
                           <div class="col-md-2">
-                            <input class="form-control" type="number" value="" id="{{sku.id}}" placeholder="0" />
+                            <input class="form-control" type="number" min="0" max="{{sku.Quantity}}" id="{{sku.id}}"placeholder="0" />
                           </div>
                             <a
                               href="#"
+<<<<<<< HEAD
                               class="button btn btn-primary btn-buy-now" onclick = "myfunc2({{sku.id}})" min="1" required>Add to checkout</a>
+=======
+                              class="button btn btn-primary btn-buy-now" onclick = "myfunc2({{sku.id}},'{{sku.Description}}','{{sku.Quantity}}')"min="1" required>Add to checkout</a>
+>>>>>>> 58144a712839a71b11aacafa1b01681f1ebe8e47
                                   </div>
                       </div>
               
@@ -277,16 +281,16 @@
                 <div class="col-lg-3 mb-4 order-0">
                   <div class='card headings'>
                     <h1>YOUR ORDER</h1>
-                    <table border="1">
+                    <table >
                       <!-- Table header -->
                       <thead>
                         <tr>
                           <th>SKUs</th>
                           <th>Amount</th>
-                          <th><button class="btn btn-secondary">delete all</button></th>
+                          <th><button onclick="clearall()"class="btn btn-secondary">clear</button></th>
                         </tr>
                       </thead>
-                      <tbody id="mytable">
+                      <tbody id="mytable" style="border-radius:3px;">
                       </tbody>
                  </div>
                 </div>
@@ -305,11 +309,11 @@
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-
     <div class="buy-now">
+      <input class="form-control" style="background-color:grey;color:white;"type="text"id="capex" placeholder="capex:(optional)" />
       <a
         href="#"
-        class="btn btn-success btn-buy-now"
+        class="btn btn-success btn-buy-now" onclick="checkout()"
         >Checkout</a
       >
     </div>
