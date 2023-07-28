@@ -1,6 +1,7 @@
 
 
 from django.shortcuts import redirect, render
+from django.http import HttpResponse
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect,get_object_or_404
@@ -120,13 +121,58 @@ def selected(request):
 
  
 # Dashboard-date Module
-class dashboard(View):
 
-    def post(self, request):
-        data = json.loads(request.body) 
-        date = data['date']
-        print(date)
-        return JsonResponse({'date': data['date']})
+
+def dashboardstock(request):
+    if request.method=="GET":
+        if 'openingdate' in request.GET:
+
+            respdict=[]
+            date=request.GET['openingdate']
+            search = 'opening' + date + '.json'
+            file_path = os.path.join("data", f"{search}")
+            with open(file_path, 'r') as file:
+                datav = json.load(file)
+                for jsonval in datav :
+                    sublist=[]
+                    for i in range(len(jsonval)):
+                        if i==0:
+                            sublist.append({"Description":jsonval[i]})
+                        if i==1:
+                            sublist.append({"Price":jsonval[i]})
+                        if i==2:
+                            sublist.append({"Packaging":jsonval[i]})
+                        if i==3:
+                            sublist.append({"Quantity":jsonval[i]})
+                        if i==4:
+                            sublist.append({"Purchase_order":jsonval[i]})
+                    respdict.append(sublist)
+                text="Opening Stock For:"+str(date)
+            return render(request, 'dashboard.html',{'respdict': respdict,"type":text})
+        elif 'closingdate' in request.GET:
+            respdict=[]
+            date=request.GET['closingdate']
+            search = 'closing' + date + '.json'
+            file_path = os.path.join("data", f"{search}")
+            with open(file_path, 'r') as file:
+                datav = json.load(file)
+                for jsonval in datav :
+                    sublist=[]
+                    for i in range(len(jsonval)):
+                        if i==0:
+                            sublist.append({"Description":jsonval[i]})
+                        if i==1:
+                            sublist.append({"Price":jsonval[i]})
+                        if i==2:
+                            sublist.append({"Packaging":jsonval[i]})
+                        if i==3:
+                            sublist.append({"Quantity":jsonval[i]})
+                        if i==4:
+                            sublist.append({"Purchase_order":jsonval[i]})
+                    respdict.append(sublist)
+            text="Closing Stock for:"+str(date)
+            return render(request, 'dashboard.html',{'respdict': respdict,"type":text})
+
 
 
 

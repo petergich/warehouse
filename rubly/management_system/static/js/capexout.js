@@ -1,6 +1,7 @@
 const searchField = document.querySelector(".search_input");
 const mytable=document.getElementById("mytable");
 display()
+console.log(sessionStorage.length)
 console.log(searchField);
 searchField.addEventListener("keyup", (event) => {
   const search = event.target.value;
@@ -174,6 +175,12 @@ function myfunc2(id,des,max) {
     
       xhr.send();
     }
+  }
+  function hide(){
+    var elem = document.getElementById("hide");
+    elem.remove();
+    var elem2=document.getElementById("layout-navbar");
+    elem2.remove();
   }
   
 
