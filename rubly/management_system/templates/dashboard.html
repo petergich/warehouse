@@ -113,7 +113,7 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="#" class="menu-link">
+              <a href="{%url 'Dashboard'%}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>               
               </a>
@@ -132,8 +132,8 @@
                   <div data-i18n="Analytics">Logout</div>               
                 </a>
               </li>
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-6 mb-4">
+              <div class="col">
+                <div class=" mb-4">
                   <div class="card">
                     <div class="card-body">
                       <div class="card-title d-flex align-items-start justify-content-between">
@@ -153,7 +153,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-6 mb-4">
+                <div class="mb-4">
                   <div class="card">
                     <div class="card-body">
                       <div class="card-title d-flex align-items-start justify-content-between">
@@ -182,7 +182,7 @@
         <!-- / Menu -->
 
         <!-- Layout container -->
-        <div class="layout-page">
+        <div class="layout-page" >
           <!-- Navbar -->
 
           <nav
@@ -242,6 +242,7 @@
                 
               </div>
               <div class="row">
+                {%if skus%}
                 {% for sku in skus  %} 
                 {%if sku.Quantity > 0 %}
                 <div class="col-lg-8 mb-4 order- ">
@@ -278,7 +279,35 @@
                 </div>
                 {% endif %}
                 {%  endfor %}
-                <div class="col-lg-3 mb-4 order-0">
+                {%endif%}
+                {%if respdict%}
+                <h1>{{type}}</h1>
+
+                <script>
+                  window.onload = function() {
+                    hide();
+                };
+                </script>
+                <table>
+                  <tr class="bg-primary" style="color:white;" >
+                      <th>Description</th>
+                      <th>Price</th>
+                      <th>Packaging</th>
+                      <th>Quantity</th>
+                      <th>Purchase Order</th>
+                  </tr>
+                  {% for product in respdict %}
+                  <tr class="bg-light fw-bold" style="border-bottom:1px solid;" >
+                      {% for item in product %}
+                      {% for key, value in item.items %}
+                      <td>{{ value }}</td>
+                      {% endfor %}
+                      {% endfor %}
+                  </tr>
+                  {% endfor %}
+              </table>
+                {%endif%}
+                <div class="col-lg-3 mb-4 order-0" id="hide">
                   <div class='card headings'>
                     <h1>YOUR ORDER</h1>
                     <table >

@@ -15,11 +15,11 @@ def create():
     model_data=[]
     for dat in data:
         purchase_order=str(dat.Purchase_Order)
-        model_data.append([dat.Description,dat.Type,dat.Price,dat.Packaging,dat.Quantity,purchase_order])
+        model_data.append([dat.Description,dat.Price,dat.Packaging,dat.Quantity,purchase_order])
     print(current_time)
-    if current_time=="06:00":
+    if current_time=="10:15":
 
-        current_date = time.strftime("%Y%m%d")  # Generate a date-only timestamp
+        current_date = time.strftime("%Y-%m-%d")  # Generate a date-only timestamp
         directory = "data"
         # Create the directory if it doesn't exist
         if not os.path.exists(directory):
@@ -28,8 +28,8 @@ def create():
 
         with open(file_name, 'w') as file:
             json.dump(model_data, file)
-    if current_time=="14:38":
-        current_date = time.strftime("%Y%m%d")  # Generate a date-only timestamp
+    if current_time=="10:16":
+        current_date = time.strftime("%Y-%m-%d")  # Generate a date-only timestamp
         directory = "data"
         # Create the directory if it doesn't exist
         if not os.path.exists(directory):
