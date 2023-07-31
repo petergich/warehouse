@@ -119,13 +119,6 @@
               </a>
             </li> <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              
-              <li class="menu-item active">
-                <a href="http://192.168.1.57:8000/admin/" target="_blank" class="menu-link">
-                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Manage stock</div>               
-                </a>
-              </li>
               <li class="menu-item active">
                 <a href="{% url 'Logout' %}"   class="menu-link">
                   <i class="menu-icon tf-icons bx bx-box"></i>
@@ -174,6 +167,24 @@
                   </div>
                 </div>
               </div>
+              <li class="menu-item active">
+                <a href="http://127.0.0.1:8000/admin/management_system/purchase_orders/" target="_blank" class="menu-link">
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Purchase Order</div>               
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="http://127.0.0.1:8000/admin/management_system/skus/" target="_blank" class="menu-link">
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">SKUs</div>               
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="http://127.0.0.1:8000/admin/management_system/capex/" target="_blank" class="menu-link">
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Capex</div>               
+                </a>
+              </li>
 
 
             <!-- Layouts -->
@@ -264,11 +275,7 @@
                           </div>
                             <a
                               href="#"
-<<<<<<< HEAD
                               class="button btn btn-primary btn-buy-now" onclick = "myfunc2({{sku.id}})" min="1" required>Add to checkout</a>
-=======
-                              class="button btn btn-primary btn-buy-now" onclick = "myfunc2({{sku.id}},'{{sku.Description}}','{{sku.Quantity}}')"min="1" required>Add to checkout</a>
->>>>>>> 58144a712839a71b11aacafa1b01681f1ebe8e47
                                   </div>
                       </div>
               
