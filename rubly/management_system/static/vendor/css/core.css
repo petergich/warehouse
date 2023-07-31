@@ -706,10 +706,10 @@ progress {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.results{
+.ts{
  position:relative;
  z-index:99999; 
-}
+}resul
 .rowadrop {
   position:fixed;
   display: none;
