@@ -12,15 +12,14 @@ class Purchase_Order(models.Model):
 
 class Description(models.Model):
     Description = models.CharField(max_length=50)
-    Type = models.CharField(max_length=50, null=True, blank=True)
+    Type = models.CharField(max_length=50)
     Packaging = models.CharField(max_length=50)
     def __str__(self):
-        return self.username
+        return self.Description
 
 class Warehouse(models.Model):
     name = models.CharField(max_length=50)
-
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -30,19 +29,19 @@ class Checkin(models.Model):
     Purchase_Order = models.ForeignKey(Purchase_Order, on_delete=models.CASCADE,null=True)
     Description = models.ForeignKey(Description, on_delete=models.CASCADE)
     Warehouse = models.ForeignKey(Warehouse,on_delete=models.CASCADE)
-
+    date=models.DateField()
     def __str__(self):
-        return str(self.Description) + str(self.Warehouse)
+        return str(self.Description) +" " +str(self.date)
 
 
 class Returns(models.Model):
     date = models.DateField()
     material=models.ForeignKey(Description,on_delete=models.CASCADE)
     Quantity = models.IntegerField()
-    rteurned_by = models.CharField(max_length=50)
+    returned_by = models.CharField(max_length=50)
 
-    def _str_(self):
-        return self.date
+    def __str__(self):
+        return str(self.date)+" "+str(self.returned_by)
 
 
 class IssuanceInternal(models.Model):
@@ -52,8 +51,8 @@ class IssuanceInternal(models.Model):
     Project = models.CharField(max_length=50)
     Quantity = models.IntegerField()
 
-    def _str_(self):
-        return self.issuedTo
+    def __str__(self):
+        return str(self.date)+" "+str(self.issuedTo)
 
 
 class IssuanceExternal(models.Model):
@@ -64,5 +63,5 @@ class IssuanceExternal(models.Model):
     Carpex = models.CharField(max_length=50)
     Quantity = models.IntegerField()
 
-    def _str_(self):
-        return self.company
+    def __str__(self):
+        return str(self.date)+" "+str(self.company)

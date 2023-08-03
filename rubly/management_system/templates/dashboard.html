@@ -194,51 +194,20 @@
 
         <!-- Layout container -->
         <div class="layout-page" >
+          {%if warehouses%}
+                {%for Warehouse in warehouses%}
+                <h1 class="headings">{{Warehouse.name}}</h1>
+                <div class="row ">
+                  {%for type in types%}
+                  <div class="card">
+                    {{type}}
+                  </div>
+                  {%endfor%}
+                </div>
+                {%endfor%}
+                {%endif%}
           <!-- Navbar -->
 
-          <nav
-            class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
-            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                <i class="bx bx-menu bx-sm"></i>
-              </a>
-            </div>
-
-            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <!-- Search -->
-              <div class="navbar-nav align-items-center ">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0" onclick = myfunc1() ></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none search_input"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                  />
-                </div>
-                
-              </div>
-             
-              
-              
-              
-              <!-- /Search -->
-
-              
-            </div>
-            
-            
-          </nav>
-          <div class="results container-xxl">
-          <div class = 'rowadrop' id="hidden">
-            <ul id = 'ul' class = 'ul-table' >
-
-            </ul>
-            
-          </div>
-        </div>
            
 
           <!-- / Navbar -->
@@ -253,40 +222,6 @@
                 
               </div>
               <div class="row">
-                {%if skus%}
-                {% for sku in skus  %} 
-                {%if sku.Quantity > 0 %}
-                <div class="col-lg-8 mb-4 order- ">
-                   
-
-                  <div class="card">
-                    <div class="d-flex align-items-end row">
-                      <div class="col-sm-7">
-                        <div class="card-body">
-                        <h5 class="card-title text-primary fw-bold"><span style="color:black"> {{sku.Description}} </span> </h5>
-                          <p class="mb-1 fw-bold" style='color:black;'>
-                            Purchase order :<span style="color:blue">{{ sku.Purchase_Order }}</span>  
-                          </p>
-                          <p class= 'text-primary fw-bold'  > <span style="color:black">Price:</span><span style="color:blue"> Ksh {{ sku.Price }}</span> </p>
-                          <p class="fw-bold"> <span style="color:black">Quantity(available):</span> <span style="color:blue">{{ sku.Quantity }}<span></p>
-                          <br><span style="color:black">Quantity:</span>
-                          <div class="col-md-2">
-                            <input class="form-control" type="number" min="0" max="{{sku.Quantity}}" id="{{sku.id}}"placeholder="0" />
-                          </div>
-                            <a
-                              href="#"
-                              class="button btn btn-primary btn-buy-now" onclick = "myfunc2({{sku.id}})" min="1" required>Add to checkout</a>
-                                  </div>
-                      </div>
-              
-                      
-                    </div>
-                  </div>
-                  
-                </div>
-                {% endif %}
-                {%  endfor %}
-                {%endif%}
                 {%if respdict%}
                 <h1>{{type}}</h1>
 
@@ -312,24 +247,8 @@
                       {% endfor %}
                   </tr>
                   {% endfor %}
-              </table>
+               </table>
                 {%endif%}
-                <div class="col-lg-3 mb-4 order-0" id="hide">
-                  <div class='card headings'>
-                    <h1>YOUR ORDER</h1>
-                    <table >
-                      <!-- Table header -->
-                      <thead>
-                        <tr>
-                          <th>SKUs</th>
-                          <th>Amount</th>
-                          <th><button onclick="clearall()"class="btn btn-secondary">clear</button></th>
-                        </tr>
-                      </thead>
-                      <tbody id="mytable" style="border-radius:3px;">
-                      </tbody>
-                 </div>
-                </div>
               </div>
             
                
@@ -346,7 +265,6 @@
     </div>
     <!-- / Layout wrapper -->
     <div class="buy-now">
-      <input class="form-control" style="background-color:grey;color:white;"type="text"id="capex" placeholder="capex:(optional)" />
       <a
         href="#"
         class="btn btn-success btn-buy-now" onclick="checkout()"

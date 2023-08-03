@@ -34,10 +34,14 @@ def Login(request):
 # Dashboard Module
 @login_required(login_url="/login/")
 def Dashboard(request):
-    description = Description.objects.all()    
-    # sku = {{'Description':'router microtic'},{'Type':'Gateway'},{'Quantity',10},{'Price': 3000}}
+    description = Description.objects.all()
+    warehouses=Warehouse.objects.all()
+    chekins=Checkin.objects.all()
+    types=list(set(Description.objects.values_list('Type', flat=True)))
+    print(types)
+    context={'Description': description,"warehouses":warehouses,"chekins":chekins,"types":types}
     
-    return render(request, 'dashboard.html', {'Description': Description})
+    return render(request, 'dashboard.html', context)
 
 
 def Logout(request):

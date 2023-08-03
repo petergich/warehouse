@@ -753,6 +753,9 @@ progress {
 .checkouts{
   color:#ffffff;
 }
+.checkout{
+  display:none;
+}
 
 .col {
   flex: 1 0 0%;
