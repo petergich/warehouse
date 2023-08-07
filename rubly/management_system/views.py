@@ -22,8 +22,7 @@ def Login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            messages.success(request, 'You are now logged in ' + username)
-            return redirect('Dashboard')
+            return redirect('dashboard')
         else:
             messages.error(request, 'Invalid Credentials')
             return redirect('Login')
@@ -34,14 +33,35 @@ def Login(request):
 # Dashboard Module
 @login_required(login_url="/login/")
 def Dashboard(request):
-    description = Description.objects.all()
-    warehouses=Warehouse.objects.all()
-    chekins=Checkin.objects.all()
-    types=list(set(Description.objects.values_list('Type', flat=True)))
-    print(types)
-    context={'Description': description,"warehouses":warehouses,"chekins":chekins,"types":types}
-    
-    return render(request, 'dashboard.html', context)
+    if  "warehouse" in request.GET and "type" in request.GET:
+        warehouse_name=request.GET['warehouse']
+        # des=Description.objects.filter(Type=request.POST['type']).id
+        warehouse=Warehouse.objects.get(name=warehouse_name).id
+        chekin=Checkin.objects.filter(description__Type =request.GET['type'],Warehouse=warehouse)
+        descriptions=[]
+        for des in chekin:
+            chec=[]
+            quantity=0
+            for che in chekin:
+                if che.description.Description==des.description.Description:
+                    if che.Quantity!=0 and che.Purchase_Order.purchase_ID!="Null":
+                            chec.append({"description":che.description.Description,"quantity":che.Quantity, "purchase_order":che.Purchase_Order.purchase_ID,"price":che.price})
+                    quantity+=che.Quantity
+            descriptions.append({"description":des.description.Description,"quantity":quantity,"pacaging":des.description.Packaging,"chekins":chec})
+            print(chec)
+        filtered=[]
+        for instance in descriptions:
+            if instance not in filtered:
+                filtered.append(instance)
+        return JsonResponse({"descriptions":filtered})
+    else:
+        description = Description.objects.all()
+        warehouses=Warehouse.objects.all()
+        chekins=Checkin.objects.all()
+        types=list(set(Description.objects.values_list('Type', flat=True)))
+        context={'Description': description,"warehouses":warehouses,"chekins":chekins,"types":types}
+        
+        return render(request, 'dashboard.html', context)
 
 
 def Logout(request):

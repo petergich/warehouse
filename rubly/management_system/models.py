@@ -4,34 +4,35 @@ import datetime
 
 
 class Purchase_Order(models.Model):
-    purchase_ID = models.CharField(max_length=50)
+    purchase_ID = models.CharField(max_length=50,unique=True)
 
     def __str__(self):
         return self.purchase_ID
     
 
 class Description(models.Model):
-    Description = models.CharField(max_length=50)
+    Description = models.CharField(max_length=50, unique=True)
     Type = models.CharField(max_length=50)
     Packaging = models.CharField(max_length=50)
     def __str__(self):
         return self.Description
 
 class Warehouse(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(unique=True,max_length=50)
     def __str__(self):
         return self.name
 
 
 
 class Checkin(models.Model):
+    price=models.IntegerField(blank=True,null=True)
     Quantity = models.IntegerField(validators=[MinValueValidator(0)])
-    Purchase_Order = models.ForeignKey(Purchase_Order, on_delete=models.CASCADE,null=True)
-    Description = models.ForeignKey(Description, on_delete=models.CASCADE)
+    Purchase_Order = models.ForeignKey(Purchase_Order, on_delete=models.CASCADE,default=None)
+    description = models.ForeignKey(Description, on_delete=models.CASCADE)
     Warehouse = models.ForeignKey(Warehouse,on_delete=models.CASCADE)
     date=models.DateField()
     def __str__(self):
-        return str(self.Description) +" " +str(self.date)
+        return str(self.description) +" " +str(self.date)
 
 
 class Returns(models.Model):

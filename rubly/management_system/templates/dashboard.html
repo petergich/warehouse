@@ -7,7 +7,7 @@
   data-theme="theme-default"
   data-assets-path="../assets/"
   data-template="vertical-menu-template-free"
->
+ >
   <head>
     <meta charset="utf-8" />
     <meta
@@ -51,7 +51,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'js/config.js' %}"></script>
-  </head>
+</head>
 
   <body>
     <!-- Layout wrapper -->
@@ -61,7 +61,7 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="{% url 'Dashboard' %}" class="app-brand-link">
+            <a href="{% url 'dashboard' %}" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <svg
                   width="25"
@@ -100,7 +100,7 @@
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">Inventory</span>
+              <span class="app-brand-text demo menu-text fw-bolder ms-2">Warehouse</span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -113,11 +113,12 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{%url 'Dashboard'%}" class="menu-link">
+              <a href="{%url 'dashboard'%}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>               
+                <div data-i18n="Analytics">Home</div>               
               </a>
-            </li> <ul class="menu-inner py-1">
+            </li> 
+            <ul class="menu-inner py-1">
               <!-- Dashboard -->
               <li class="menu-item active">
                 <a href="{% url 'Logout' %}"   class="menu-link">
@@ -168,42 +169,92 @@
                 </div>
               </div>
               <li class="menu-item active">
-                <a href="http://127.0.0.1:8000/admin/management_system/purchase_orders/" target="_blank" class="menu-link">
+                <a href="http://127.0.0.1:8000/admin/management_system/purchase_order/"  class="menu-link">
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Purchase Order</div>               
                 </a>
               </li>
               <li class="menu-item active">
-                <a href="http://127.0.0.1:8000/admin/management_system/skus/" target="_blank" class="menu-link">
+                <a href="http://127.0.0.1:8000/admin/management_system/description/"  class="menu-link">
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">SKUs</div>               
+                  <div data-i18n="Analytics">SKUS</div>               
                 </a>
               </li>
               <li class="menu-item active">
-                <a href="http://127.0.0.1:8000/admin/management_system/capex/" target="_blank" class="menu-link">
+                <a href="http://127.0.0.1:8000/admin/management_system/checkin/"  class="menu-link">
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Capex</div>               
+                  <div data-i18n="Analytics">Checkins</div>               
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="http://127.0.0.1:8000/admin/management_system/returns/"  class="menu-link">
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Returns</div>               
                 </a>
               </li>
 
-
+            </ul>
             <!-- Layouts -->
            
         </aside>
         <!-- / Menu -->
 
         <!-- Layout container -->
-        <div class="layout-page" >
+        <div class="layout-page m-4" >
+         
+
           {%if warehouses%}
                 {%for Warehouse in warehouses%}
-                <h1 class="headings">{{Warehouse.name}}</h1>
-                <div class="row ">
+                <div class="warehouse-card">
+                <div class="warehouse" id="{{Warehouse.name}}">
+                <h3 class="headings align-self-sm-center"><span style="color:blue;">Warehouse:</span>{{Warehouse.name}}</h3>
+                <div class="card1  ml mb-2 " >
                   {%for type in types%}
-                  <div class="card">
+                  <div class="card2 col-2" onclick="typeclick('{{Warehouse.name}}','{{type}}')">
                     {{type}}
                   </div>
                   {%endfor%}
                 </div>
+                <table class="table">
+                  <thead class="thead-dark ml tbhead hidden" id="head{{Warehouse.name}}">
+                  <tr class=" bg-info " style="color:white;">
+                    <th scope="col">Description</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Packaging</th>
+                    {% comment %} <th scope="col">Purchse order</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th> {% endcomment %}
+                  </tr>
+                </thead>
+                <tbody id="table{{Warehouse.name}}"></tbody>
+                <table class=" table hidden"id="head1{{Warehouse.name}}">
+                  <thead class="thead-dark ml tbhead">
+                  <tr class=" bg-info" style="color:white;">
+                    <th scope="col">Description</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Packaging</th>
+                     <th scope="col">Purchse order</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                <tbody id="table1{{Warehouse.name}}"></tbody>
+                </table>
+              </div>
+              <div class="buy-now hidden" id="input{{Warehouse.name}}"style="position:fixed;bottom:3%;align-self:top;justify-content:space-between;">
+                <div id="error{{Warehouse.name}}"class="hidden"style="color:red;"></div>
+                <input class="" style="border-radius:0.5rem;border-width:0.05rem;"type="text" id='po{{Warehouse.name}}'placeholder="Purchase Order">
+                <input class="" style="border-radius:0.5rem;border-width:0.05rem;"type="text" id="capex{{Warehouse.name}}"placeholder="Capex">
+                <input class="" style="border-radius:0.5rem;border-width:0.05rem;"type="number" id="quantity{{Warehouse.name}}"placeholder="Quantity">
+                <textarea id="reason{{Warehouse.name}}" style="border-radius:0.5rem;color:red;"name="long-text" rows="5" id="reason{{Warehouse.name}}"cols="40" placeholder="Reason for no capex/PO"></textarea>
+                <div>
+                  <a
+                    class="btn btn-success btn-buy-now"id="button{{Warehouse.name}}"
+                    >Checkout</a
+                  >
+                </div>
+              </div>
+            </div>
                 {%endfor%}
                 {%endif%}
           <!-- Navbar -->
@@ -263,14 +314,8 @@
       <!-- Overlay -->
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
+   
     <!-- / Layout wrapper -->
-    <div class="buy-now">
-      <a
-        href="#"
-        class="btn btn-success btn-buy-now" onclick="checkout()"
-        >Checkout</a
-      >
-    </div>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
