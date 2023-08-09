@@ -220,7 +220,7 @@
   
                     <div class="dropdown-menu" id="client{{client.client.name}}">
                       {%for project in client.projects%}
-                        <button data-toggle="modal" data-target="#{{project.region}}myModal" type = "button" class="dropdown-item btn btn-outline-info">{{project.project_type.name}} </button>
+                        <button data-toggle="modal" data-target="#{{ project.region }}myModal" type = "button" class="dropdown-item btn btn-outline-info">{{project.project_type.name}} </button>
                         
                       {%endfor%}
                     </div>
@@ -258,14 +258,12 @@
                           </thead>
                           <tbody>
 
+                          
                             {%for z in y.project_region%}
-
                             <tr class="table-info">
-
                               <td>{{z}}</td>
-                              
-                            {%endfor%}
                             </tr>
+                            {%endfor%}
                             
                           </tbody>
                         </table>
@@ -274,12 +272,12 @@
                       <!-- Modal footer -->
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              </div>
-                              
-                            </div>
-                          </div>
-                        </div>
-                        
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                
                             {%endfor%}
                             {%endfor%}
             
