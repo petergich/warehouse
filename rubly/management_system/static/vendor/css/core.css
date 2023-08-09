@@ -3960,6 +3960,16 @@ fieldset:disabled .btn {
 .navbar-dark .navbar-text a:focus {
   color: #fff;
 }
+.clickable-div {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+}
+
+.dropdownhide {
+  display: none;
+}
 .warehouse{
   display: flex;
   flex-direction: column;
@@ -3996,7 +4006,17 @@ fieldset:disabled .btn {
   justify-content:flex-start;
   gap:1rem;
 }
-
+.type-dropdown{
+  display:none;
+  margin-top: 1%;
+  border-radius: 5%;
+  position:fixed;
+  background-color: #b1b1b1;
+  z-index: 99;
+}
+.float-parent{
+  position:relative;
+}
 .card {
   position: relative;
   display: flex;

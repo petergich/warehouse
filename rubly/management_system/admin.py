@@ -4,10 +4,11 @@ from .models import *
 # Register your models here.
 
 admin.site.register(Description)
-admin.site.register(Warehouse)
+admin.site.register(Client)
 admin.site.register(Purchase_Order)
 admin.site.register(IssuanceExternal)
 admin.site.register(IssuanceInternal)
 admin.site.register(Returns)
-admin.site.register(Checkin)
-
+admin.site.register(Goods_received)
+admin.site.register(Project_Type)
+admin.site.register(Project)
