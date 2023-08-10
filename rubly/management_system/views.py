@@ -31,7 +31,7 @@ def Login(request):
 
 
 # Dashboard Module
-@login_required(login_url="/login/")
+@login_required(login_url="Login")
 def Dashboard(request):
         project_types=Project_Type.objects.all()
         clients=Client.objects.all()
@@ -43,7 +43,6 @@ def Dashboard(request):
                 if project.client.name==client.name:
                     Project_region = Project.objects.filter(project_type__name=project.name,project_type__client__name=client.name)
                     projects.append({"project_type":project,"project_region":Project_region})
-                    print(projects)
 
             list_clients.append({
                 "client":client,

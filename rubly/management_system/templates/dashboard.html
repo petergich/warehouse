@@ -209,7 +209,7 @@
             <div class="">
               <h3>Techminds</h3>
             </div>
-            <div class="card1 clients">
+            <div class="card1 clients" id="clients">
               {%if list_clients%}
               {%for client in list_clients%}
               <div class="dropdown">
@@ -218,16 +218,70 @@
               </button>
                   {%if client.projects%}
   
-                    <div class="dropdown-menu" id="client{{client.client.name}}">
+                    <div class="dropdown-menu">
                       {%for project in client.projects%}
-                        <a class="dropdown-item">{{project.project_type.name}}</a>
+                        <button data-toggle="modal" data-target="#{{project.project_type.name}}myModal" type = "button" class="dropdown-item btn btn-outline-info">{{project.project_type.name}} </button>
+                        
                       {%endfor%}
                     </div>
                   {%endif%}
               </div>
               {%endfor%}
+              {% else  %}
+              <script>
+                element = document.getElementById("clients");
+                element.remove()
+              </script>
               {%endif%}
-            </div> 
+              
+        </div> 
+              {%for x in list_clients%}
+              {%for y in x.projects%}
+              {%if y.project_region%}
+              <div class="modal fade" id="{{ y.project_type.name}}myModal">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                  
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">{{ x.client.name}} - {{ y.project_type.name }}</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body --> 
+                    <div class="modal-body"> 
+                            <div class="container">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr class="table-hover">
+                                  <th><h3>Project</h3></th>
+                                  <th><h3>Region</h3></th>
+                                  <th><h3>Owner</h3></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                           {%for z in y.project_region%}
+                            <tr class="table-info">
+                              <td>{{z.project_type.name}}</td>
+                              <td>{{z.region}}</td>
+                              <td>{{z.project_type.owner.name}}</td>
+                            </tr>
+                            {%endfor%}
+                          </tbody>
+                          </table>
+                          
+                      </div> 
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    
+                  </div>
+                </div>
+              </div>
+              {%endif%}
+              {%endfor%}
+              {%endfor%}
+            
+
             
           </div>
                 {%if respdict%}
