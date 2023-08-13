@@ -48,23 +48,27 @@ def Dashboard(request):
                 "client":client,
                 "projects":projects,
             })
-        types=list(set(Description.objects.values_list('Type', flat=True)))    
-        return render(request, 'dashboard.html',{"list_clients":list_clients})
-
-
+        Pur=Purchase_Order.objects.all()
+        POs=[]
+        for p in Pur:
+            if p.purchase_ID not in POs:
+                POs.append(p.purchase_ID)
+        return render(request, 'dashboard.html',{"list_clients":list_clients,"purchase_orders":POs})
+@login_required(login_url="Login")
+def issue(request):
+    return render(request,"issue.html")
+@login_required(login_url="Login")
+def capex(request):    
+    return render(request,'capex.html')
+    
 def Logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        messages.success(request, 'You are now logged out')
         return redirect('Login')
     return redirect('Login')
 
-
-def selected(request):    
- return JsonResponse({'date': "Successfull"})
-    
-
 # Dashboard-date Module
+@login_required(login_url="Login")
 def dashboardstock(request):
     if request.method=="GET":
         if 'openingdate' in request.GET:

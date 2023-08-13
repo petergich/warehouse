@@ -61,8 +61,8 @@
           <!-- Register -->
           <div class="card">
             <div class="card-body">
-              <h4 class="mb-2">Welcome to Nubly's Inventory! 👋</h4>
-              <p class="mb-4">Please sign-in to your account and start the adventure</p>
+              <h4 class="mb-2">Welcome to Techminds Inventory! 👋</h4>
+              <p class="mb-4">Please sign-in to your account</p>
 
               <form id="formAuthentication" class="mb-3" action="{% url 'Login' %}" method="POST">
                 {% csrf_token %} 
@@ -103,7 +103,7 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                  <button class="btn btn-success d-grid w-100" type="submit">Sign in</button>
                 </div>
               </form>
 

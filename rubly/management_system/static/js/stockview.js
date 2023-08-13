@@ -21,6 +21,13 @@ DateField.addEventListener('change', (event) => {
 }
 
 });
+function hide(){
+    alert("called")
+    elements=document.querySelectorAll(".hide")
+    elements.forEach(element => {
+        element.classList.add("hidden")
+    });
+}
 // container.addEventListener('mouseover', function(event) {
 //     const hoveredDiv = event.target;
 //     const dropdownId = document.getElementById("client"+hoveredDiv.id);

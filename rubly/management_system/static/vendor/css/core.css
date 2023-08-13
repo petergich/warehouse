@@ -72,7 +72,7 @@
 }
 
 body {
-  padding:1rem;
+
   margin: 0;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
@@ -3996,7 +3996,7 @@ fieldset:disabled .btn {
   
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-wrap:wrap;
   min-width: 0;
   background-color: #fff;
   background-clip: border-box;
@@ -15296,7 +15296,9 @@ body {
   .tab-content {
     min-height: 1px;
   }
-
+.max-width{
+  max-width:fit-content;
+}
   img {
     min-height: 1px;
     height: auto;
@@ -15831,8 +15833,9 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   display: flex;
   flex: 1 1 auto;
   align-items: stretch;
-  margin-top: 1.5rem;
-
+}
+.space-between{
+  justify-content: space-between;
 }
 .layout-without-menu .layout-page {
   padding-right: 0 !important;
