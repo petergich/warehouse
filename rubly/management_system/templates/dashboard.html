@@ -188,11 +188,29 @@
               </li>
               <li class="menu-item active">
                 <a
-                  href="http://127.0.0.1:8000/admin/management_system/purchase_order/add/"
+                  href="http://127.0.0.1:8000/admin/management_system/client/add/"
                   class="menu-link"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Add Purchase Order</div>
+                  <div data-i18n="Analytics">Add Clients</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a
+                  href="http://127.0.0.1:8000/admin/management_system/project_type/add/"
+                  class="menu-link"
+                >
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Add Project types</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a
+                  href="http://127.0.0.1:8000/admin/management_system/project/add/"
+                  class="menu-link"
+                >
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Add Project</div>
                 </a>
               </li>
               <li class="menu-item active">
@@ -206,20 +224,20 @@
               </li>
               <li class="menu-item active">
                 <a
-                  href="http://127.0.0.1:8000/admin/management_system/checkin/add/"
+                  href="http://127.0.0.1:8000/admin/management_system/purchase_order/add/"
                   class="menu-link"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Add goods</div>
+                  <div data-i18n="Analytics">Add PO</div>
                 </a>
               </li>
               <li class="menu-item active">
                 <a
-                  href="http://127.0.0.1:8000/admin/management_system/returns/add/"
+                  href="http://127.0.0.1:8000/admin/management_system/goods_received/add/"
                   class="menu-link"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Add Returns</div>
+                  <div data-i18n="Analytics">Add goods</div>
                 </a>
               </li>
             </ul>
@@ -379,11 +397,11 @@
                 </button>
                 {%if list_clients%}
                 <div class="dropdown-menu" aria-labelledby="dropdownButton1">
-                  <button class="dropdown-item btn btn-outline-info">
+                  <button class="dropdown-item btn btn-outline-info" onclick="stock('all')">
                     All Stock
                   </button>
                   {%for client in list_clients%}
-                  <button class="dropdown-item btn btn-outline-info">
+                  <button class="dropdown-item btn btn-outline-info" onclick="stock('{{client.client.name}}')">
                     {{client.client.name}}
                   </button>
                   {%endfor%}

@@ -5935,9 +5935,7 @@ fieldset:disabled .btn {
 
 .fixed-bottom {
   position: fixed;
-  right: 0;
   bottom: 0;
-  left: 0;
   z-index: 1030;
 }
 
@@ -6371,7 +6369,9 @@ a.invert-bg-dark:focus {
   width: 0.1%;
   white-space: nowrap;
 }
-
+.border-thin{
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
 .table-secondary {
   --bs-table-bg: #e7e9ed;
   --bs-table-striped-bg: #e2e5e9;
@@ -9504,6 +9504,9 @@ button.list-group-item-gray.active {
 .bottom-0 {
   bottom: 0 !important;
 }
+.bottom-2{
+  margin-bottom: 2% !important;
+}
 
 .bottom-50 {
   bottom: 50% !important;
@@ -10127,9 +10130,11 @@ button.list-group-item-gray.active {
 .mt-4 {
   margin-top: 1.5rem !important;
 }
-
+.alight-bottom{
+  margin-top: 5rem;
+}
 .mt-5 {
-  margin-top: 3rem !important;
+  margin-top: 50%;
 }
 
 .mt-auto {
@@ -15767,6 +15772,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.max-width
 .menu-collapsed:not(:hover) .menu-inner > .menu-header .menu-header-text,
 .menu-collapsed:not(:hover) .menu-block .menu-header-text {
   overflow: hidden;

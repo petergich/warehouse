@@ -1,32 +1,34 @@
-const dateField = document.querySelector('.opening_stock');
-const DateField = document.querySelector('.closing_stock');
-dateField.addEventListener('change', (event) => {
-    const dateVal = event.target.value;
-    console.log(dateVal);
-    let json = JSON.stringify({openingdate :dateVal});
-    console.log(json);
-    if  (dateVal.length > 0 ){
-        var url = "dashboardstock/?openingdate=" + encodeURIComponent(dateVal);
-        window.location.href = url;
-       
+function stock(sel){
+    url="stock?selected="+encodeURIComponent(sel)
+    window.location.href=url;
 }
+function listGoods(client,project){
+    const url = new URL('check', window.location.origin);
+    url.searchParams.append('client', client);
+    url.searchParams.append('project', project);
 
-});
-DateField.addEventListener('change', (event) => {
-    const dateVal = event.target.value;
-    if  (dateVal.length > 0 ){
-        var url = "dashboardstock/?closingdate=" + encodeURIComponent(dateVal);
-        window.location.href = url;
-       
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Process the received data
+            if(data==="found"){
+                fetchData(client,project);
+            }
+            else{
+                alert(data)
+            }
+        })
+        .catch(error => {
+            alert(error);
+        });
 }
-
-});
-function hide(){
-    alert("called")
-    elements=document.querySelectorAll(".hide")
-    elements.forEach(element => {
-        element.classList.add("hidden")
-    });
+function fetchData(client,project){
+    url="selected?client="+encodeURIComponent(client)+"&project="+encodeURIComponent(project);
+    window.location.href=url
+}
+function desSelect(client,project,des,qty){
+    url="good?client="+encodeURIComponent(client)+"&project="+encodeURIComponent(project)+"&description="+encodeURIComponent(des)+"&quantity="+encodeURIComponent(qty);
+    window.location.href=url;
 }
 // container.addEventListener('mouseover', function(event) {
 //     const hoveredDiv = event.target;
@@ -60,6 +62,39 @@ function hide(){
 //         dropdownId.style.display="block";
 //     }
 // });
+// Function to fetch data from the server
+// const dateField = document.querySelector('.opening_stock');
+// const DateField = document.querySelector('.closing_stock');
+// dateField.addEventListener('change', (event) => {
+//     const dateVal = event.target.value;
+//     console.log(dateVal);
+//     let json = JSON.stringify({openingdate :dateVal});
+//     console.log(json);
+//     if  (dateVal.length > 0 ){
+//         var url = "dashboardstock/?openingdate=" + encodeURIComponent(dateVal);
+//         window.location.href = url;
+       
+// }
+
+// });
+// DateField.addEventListener('change', (event) => {
+//     const dateVal = event.target.value;
+//     if  (dateVal.length > 0 ){
+//         var url = "dashboardstock/?closingdate=" + encodeURIComponent(dateVal);
+//         window.location.href = url;
+       
+// }
+
+// });
+// function hide(){
+//     alert("called")
+//     elements=document.querySelectorAll(".hide")
+//     elements.forEach(element => {
+//         element.classList.add("hidden")
+//     });
+// }
+
+
 
 
 

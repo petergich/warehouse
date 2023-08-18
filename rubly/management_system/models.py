@@ -45,11 +45,17 @@ class Goods_received(models.Model):
     Purchase_Order = models.ForeignKey(Purchase_Order, on_delete=models.CASCADE,default=None)
     description = models.ForeignKey(Description, on_delete=models.CASCADE)
     date=models.DateField()
+    remaining=models.IntegerField()
+    def save(self, *args, **kwargs):
+        # Set remaining to the same value as Quantity if not provided
+        if self.remaining is None:
+            self.remaining = self.Quantity
+        super().save(*args, **kwargs)
     class Meta:
         # Specify the unique_together constraint
         unique_together = ['Purchase_Order', 'description']
     def __str__(self):
-        return str(self.description) +" " +str(self.date)
+        return "PO:"+str(self.Purchase_Order.purchase_ID)+", "+"Good:"+str(self.description)
 
 
 class Returns(models.Model):
@@ -80,7 +86,6 @@ class IssuanceExternal(models.Model):
     material=models.ForeignKey(Description,on_delete=models.CASCADE)
     Carpex = models.CharField(max_length=50)
     Quantity = models.IntegerField()
-    
     def __str__(self):
         return str(self.date)+" "+str(self.company)
 class Project(models.Model):

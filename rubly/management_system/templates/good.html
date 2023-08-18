@@ -167,19 +167,13 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{%url 'dashboard'%}" class="menu-link card">
+              <a href="{%url 'dashboard'%}" class="menu-link bg-success card">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Home</div>
               </a>
             </li>
             <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              <li class="menu-item active">
-                <a href="{% url 'Logout' %}" class="menu-link card bg-success">
-                  <i class="menu-icon tf-icons bx bx-box"></i>
-                  <div data-i18n="Analytics">Logout</div>
-                </a>
-              </li>
               <li class="menu-item active">
                 <a href="{% url 'Issue' %}" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-box"></i>
@@ -281,7 +275,9 @@
                     <a class="nav-link" href="#">Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a href="{% url 'Logout' %}" class="nav-link card bg-primary">
+                      <div data-i18n="Analytics">Logout</div>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -289,7 +285,111 @@
           </nav>
 
           <!-- Page content goes here -->
-          
+          <div class="container m-3 " style="max-width: 90%;max-height:30vh;">
+            <div>
+              <h3>{{client}}</h3>
+            </div>
+            <div>
+              <h3>{{project}}</h3>
+            </div>
+            <hr />
+            <div class="card overflow-scroll" style="max-height:30vh">
+              <table class=" table" >
+                <thead class="bg-info">
+                  <tr class="table-hover">
+                    <th><h5 style="color: white">Type</h5></th>
+                    <th><h5 style="color: white">Material</h5></th>
+                    <th><h5 style="color: white">Packaging</h5></th>
+                    <th><h5 style="color: white">Total Quantity</h5></th>
+                    <th><h5 style="color: white">Purchase Order</h5></th>
+                    <th><h5 style="color: white">PO Quantity</h5></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if goods %} {% for good in goods %} {% if forloop.first%}
+                  <tr>
+                    <td>{{description.Type}}</td>
+                    <td>{{description.Description}}</td>
+                    <td>{{description.Packaging}}</td>
+                    <td id="quantityvalue">{{quantity}}</td>
+                    <td>{{good.Purchase_Order}}</td>
+                    <td id="{{good.Purchase_Order}}">{{good.remaining}}</td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                    <td>__</td>
+                    <td>__</td>
+                    <td>__</td>
+                    <td>__</td>
+                    <td>{{good.Purchase_Order}}</td>
+                    <td id="{{good.Purchase_Order}}">{{good.remaining}}</td>
+                  </tr>
+                  {% endif%} {% endfor %} {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="position-fixed" style="">
+            <div
+              class="container card1 m-5 border-thin align-items-center"
+              style="max-width: fit-content;bottom:-23rem;"
+            >
+              <div class="row m-2 ">
+                <label for="po">Purchase Order</label>
+                <input
+                  class="input"
+                  onkeyup="validator()"
+                  type="text"
+                  id="po"
+                  name="po"
+                  placeholder="Purchase order"
+                  requred
+                />
+                <div><p style="color:red;z-index:9999;" id="perror"></p></div>
+              </div>
+              <div class="row m-2">
+                <label for="quantity">Quantity</label>
+                <input
+                onkeyup="validator()"
+                  class="input"
+                  type="number"
+                  id="quantity"
+                  name="quantity"
+                  placeholder="Quantity"
+                  requred
+                />
+                <div><p style="color:red;z-index:9999;" id="qerror"></p></div>
+              </div>
+              <div class="row m-2">
+                <label for="po">Capex</label>
+                <input
+                  class="input"
+                  type="text"
+                  id="capex"
+                  name="capex"
+                  placeholder="Capex"
+                  requred
+                />
+              </div>
+              <div class="row m-2">
+                <label for="po">Company</label>
+                <input
+                  class="input"
+                  type="text"
+                  id="company"
+                  name="company"
+                  placeholder="Company"
+                  requred
+                />
+              </div>
+              <div class=" m-2 btn fixed-bottom" >
+                <button class="btn btn-success " type="button" onclick="submit()"style="margin-left:70vw;">Issue Out</button>
+              </div>
+            </div>
+         
+          </div>
+        
+
           <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->
@@ -301,6 +401,101 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+    <script>
+  // Access the data passed from the Django view
+  var myData = {{ goods_json | safe }};
+  var orquantity = {{ quantity | safe }};
+  var client = "{{ client | safe }}";
+  var project = "{{ project | safe }}";
+  var desc= "{{ description | safe }}"
+  po=document.getElementById("po");
+  quantity=document.getElementById("quantity");
+  perror=document.getElementById("perror");
+  qerror=document.getElementById("qerror")
+  total=document.getElementById("quantityvalue")
+  capex=document.getElementById("capex")
+  company=document.getElementById("company")
+  function validator(){
+    pos=[]
+    myData.forEach(function(dat){
+      pos.push(dat.po)
+    });
+    if(po.value===""){
+      perror.innerHTML="";
+      qerror.innerHTML="";
+    }
+    else if(pos.includes(po.value)){
+      field=document.getElementById(po.value)
+      perror.innerHTML="Exists!"
+      perror.style.color="green"
+      var original;
+      myData.forEach(function(dat){
+       if(dat.po===po.value){
+        original=dat.quantity;
+       }
+      });
+      if(quantity.value > 0 && quantity.value <= original ){
+        field.innerHTML=original-quantity.value
+        total.innerHTML=total.innerHTML-quantity.value
+        qerror.innerHTML="";
+        
+          return true;
+       
+  
+      }
+      if(quantity.value>original){
+        field.innerHTML=original
+        total.innerHTML=orquantity
+        qerror.innerHTML="!Amount not available";
+        qerror.style.color="red";
+      }
+      
+      if(quantity.value<=0){
+        field.innerHTML=original
+        total.innerHTML=orquantity
+        qerror.innerHTML="";
+      }
+    }
+    else{
+      perror.innerHTML="Invalid PO!"
+      perror.style.color="red"
+    }
+}
+function submit(){
+    if(capex.value===""||company.value==="" || po.value===""||quantity.value===""){
+      alert("Ensure all fields are filled!")
+    }
+    else if (validator()){
+      var result = window.confirm("Confirm Checkout from PO:"+po.value);
+      if(result){
+      const url = new URL('checkout',window.location.origin);
+    url.searchParams.append('client', client);
+    url.searchParams.append('project', project);
+    url.searchParams.append('company',company.value);
+    url.searchParams.append('capex',capex.value);
+    url.searchParams.append('po',po.value);
+    url.searchParams.append('desc',desc);
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Process the received data
+            if(data==="found"){
+                
+            }
+            else{
+                alert(data)
+            }
+        })
+        .catch(error => {
+            alert(error);
+        });
+      }
+      else{
+        alert("Cancelled")
+      }
+    }
+}
+</script>
     <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.js' %}"></script>

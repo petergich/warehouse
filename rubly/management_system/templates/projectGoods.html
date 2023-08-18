@@ -247,7 +247,7 @@
         <!-- / Menu -->
         <!-- Layout container -->
 
-        <div class="layout-page">
+        <div class="layout-page img-fluid">
           <nav class="navbar navbar-expand-lg navbar-dark bg-info">
             <div class="container">
               <div
@@ -289,6 +289,30 @@
           </nav>
 
           <!-- Page content goes here -->
+          <div class="container m-3" style="max-width:90%;">
+            <div class="card">
+                <table class="table table-hover">
+                    <thead class="bg-info">
+                        <tr class="table-hover">
+                            <th><h5>Type</h5></th>
+                            <th><h5>Material</h5></th>
+                            <th><h5>Packaging</h5></th>
+                            <th><h5>Quantity</h5></th>
+                        </th>
+                    </thead>
+                    <tbody>
+                    {% for obj in objects %}
+                    <tr class="table-info" onclick="desSelect('{{client}}','{{project}}','{{obj.description}}','{{obj.quantity}}')">
+                      <td>{{obj.description.Type}}</td>
+                      <td>{{obj.description.Description}}</td>
+                      <td>{{obj.description.Packaging}}</td>
+                      <td>{{obj.quantity}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+          </div>
           
           <!-- Content wrapper -->
         </div>

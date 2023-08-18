@@ -150,7 +150,7 @@
                 </svg>
               </span>
               <span class="app-brand-text demo menu-text fw-bolder ms-2"
-                >Warehouse</span
+                >inventory</span
               >
             </a>
 
@@ -188,11 +188,29 @@
               </li>
               <li class="menu-item active">
                 <a
-                  href="http://127.0.0.1:8000/admin/management_system/purchase_order/add/"
+                  href="http://127.0.0.1:8000/admin/management_system/client/add/"
                   class="menu-link"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Add Purchase Order</div>
+                  <div data-i18n="Analytics">Add Clients</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a
+                  href="http://127.0.0.1:8000/admin/management_system/project_type/add/"
+                  class="menu-link"
+                >
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Add Project types</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a
+                  href="http://127.0.0.1:8000/admin/management_system/project/add/"
+                  class="menu-link"
+                >
+                  <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                  <div data-i18n="Analytics">Add Project</div>
                 </a>
               </li>
               <li class="menu-item active">
@@ -206,20 +224,20 @@
               </li>
               <li class="menu-item active">
                 <a
-                  href="http://127.0.0.1:8000/admin/management_system/checkin/add/"
+                  href="http://127.0.0.1:8000/admin/management_system/purchase_order/add/"
                   class="menu-link"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Add goods</div>
+                  <div data-i18n="Analytics">Add PO</div>
                 </a>
               </li>
               <li class="menu-item active">
                 <a
-                  href="http://127.0.0.1:8000/admin/management_system/returns/add/"
+                  href="http://127.0.0.1:8000/admin/management_system/goods_received/add/"
                   class="menu-link"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                  <div data-i18n="Analytics">Add Returns</div>
+                  <div data-i18n="Analytics">Add goods</div>
                 </a>
               </li>
             </ul>
@@ -271,6 +289,32 @@
           </nav>
 
           <!-- Page content goes here -->
+          <div class="container">
+            {% if objects %}
+            {% for cli in objects %}
+            {% if cli.projects %}
+            <div class="container">
+              <h3 style="color:black;">{{cli.clients.name}}</h3>
+              <hr>
+              <div class="card1 mb-4">
+                {% for project in cli.projects %}
+                  <button
+                    data-toggle="modal"
+                    onclick="listGoods('{{cli.clients.name}}','{{project}}')"
+                    type="button"
+                    class=" btn  card2"
+                  >
+                    {{project}}
+                  </button>
+
+                  {% endfor %}
+              </div>
+             
+            </div>
+            {% endif %}
+            {% endfor%}
+            {% endif%}
+          </div>
           
           <!-- Content wrapper -->
         </div>
@@ -283,6 +327,11 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+    {% if error%}
+    <script>
+      alert({{error}})
+    </script>
+    {% endif %}
     <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.js' %}"></script>

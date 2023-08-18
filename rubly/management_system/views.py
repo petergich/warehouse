@@ -10,6 +10,7 @@ import json
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import os
+from django.core.serializers import serialize
 import time
 import datetime
 from django.contrib.auth.decorators import login_required
@@ -56,11 +57,90 @@ def Dashboard(request):
         return render(request, 'dashboard.html',{"list_clients":list_clients,"purchase_orders":POs})
 @login_required(login_url="Login")
 def issue(request):
-    return render(request,"issue.html")
+    clients=Client.objects.all()
+    project_types=Project_Type.objects.all()
+    objects=[]
+    for clien in clients:
+        project=[]
+        for pro in project_types:
+            if pro.client.name==clien.name:
+                project.append(pro.name)
+        objects.append({"clients":clien,"projects":project})
+    return render(request,"issue.html",{"objects":objects})
+@login_required(login_url="Login")
+def check(request):
+    if request.GET['client']:
+        client=request.GET['client']
+        proje=request.GET['project']
+        project=Project_Type.objects.get(client__name=client,name=proje)
+        #get all goods where the project type is the one selected
+        goods=Goods_received.objects.filter(Project_Type=project)
+        des=[]
+        #looping through the goods and adding their description in the list
+        for good in goods:
+            if good.description not in des:
+                des.append(good.description)
+        #loop on every descriptio appending the description instance and all the goods associated with it
+        objects=[]
+        for description in des:
+            #loop on every good testing if the good.description matches the one for our current loop then adding it in the list
+            Quantity=0
+            for good in goods:
+                if good.description==description:
+                    Quantity+=good.remaining
+            objects.append({"description":description,"quantity":Quantity})
+        if objects==[]:
+            message="No goods for selected type"
+        else:
+            message="found"
+    return JsonResponse(message,safe=False)
+@login_required(login_url="Login")
+def projectGoods(request):
+    if request.GET['client']:
+        client=request.GET['client']
+        proje=request.GET['project']
+        project=Project_Type.objects.get(client__name=client,name=proje)
+        #get all goods where the project type is the one selected
+        goods=Goods_received.objects.filter(Project_Type=project)
+        des=[]
+        #looping through the goods and adding their description in the list
+        for good in goods:
+            if good.description not in des:
+                des.append(good.description)
+        #loop on every descriptio appending the description instance and all the goods associated with it
+        objects=[]
+        for description in des:
+            instan=Description.objects.get(Description=description)
+            #loop on every good testing if the good.description matches the one for our current loop then adding it in the list
+            Quantity=0
+            for good in goods:
+                if good.description==description:
+                    Quantity+=good.remaining
+            objects.append({"description":instan,"quantity":Quantity})
+        return render(request,"projectGoods.html",{"objects":objects,"client":client,"project":proje})
+@login_required(login_url="Login")
+def good(request):
+    if request.GET['description']:
+        des=request.GET['description']
+        client=request.GET['client']
+        proj=request.GET['project']
+        goods=Goods_received.objects.filter(Project_Type__name=proj,Project_Type__client__name=client,description__Description=des,remaining__gt=0)
+        desc=Description.objects.get(Description=des)
+        Quantity=0
+        for good in goods:
+                Quantity+=good.remaining
+        goods_json = []
+        for good in goods:
+            goods_json.append({"po":good.Purchase_Order.purchase_ID,"quantity":good.remaining})
+        return render(request,"good.html",{"goods":goods,"description":desc,"quantity":Quantity,"client":client,"project":proj,"goods_json":goods_json})
+@login_required(login_url="Login")
+def checkout(request):
+    if request.GET['company']:
+        good=Goods_received.objects.get(Purchase_Order__purchase_ID=request.GET['po'],description__Description=request.GET['desc'],Project_Type__name=request.GET['project'],Project_Type__client__name=request.GET['client'])
+        
 @login_required(login_url="Login")
 def capex(request):    
     return render(request,'capex.html')
-    
 def Logout(request):
     if request.method == 'POST':
         auth.logout(request)
@@ -68,6 +148,16 @@ def Logout(request):
     return redirect('Login')
 
 # Dashboard-date Module
+@login_required(login_url="Login")
+def stock(request):
+    if request.GET['selected']=="all":
+         clients=Client.objects.all()
+         recieved=Goods_received.objects.all()
+         return render(request,"stock.html")
+    else:
+        clients=Client.objects.all()
+
+        return render(request,"stock.html")
 @login_required(login_url="Login")
 def dashboardstock(request):
     if request.method=="GET":
