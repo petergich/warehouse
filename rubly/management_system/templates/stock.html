@@ -289,6 +289,36 @@
           </nav>
 
           <!-- Page content goes here -->
+          <table class="table">
+            <thead>
+                <tr class="bg-info">
+                    <th>ID</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>date</th>
+                    <th>Remaining</th>
+                    <th>Client Name</th>
+                    <th>Project Name</th>
+                    <th>purchase_order</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in current_stocks %}
+                <tr class="table-info">
+                    <td>{{ stock.id }}</td>
+                    <td>{{ stock.price }}</td>
+                    <td>{{ stock.Quantity }}</td>
+                    <td>{{ stock.description }}</td>
+                    <td>{{ stock.date }}</td>
+                    <td>{{ stock.remaining }}</td>
+                    <td>{{ stock.client_name }}</td>
+                    <td>{{ stock.project_name }}</td>
+                    <td>{{stock.Purchase_Order}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
           
           <!-- Content wrapper -->
         </div>

@@ -1,7 +1,7 @@
-function stock(sel){
-    url="stock?selected="+encodeURIComponent(sel)
-    window.location.href=url;
-}
+// function stock(sel){
+//     url="stock?selected="+encodeURIComponent(sel)
+//     window.location.href=url;
+// }
 function listGoods(client,project){
     const url = new URL('check', window.location.origin);
     url.searchParams.append('client', client);

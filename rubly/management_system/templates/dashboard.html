@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-<html
+]<html
   lang="en"
   class="light-style layout-menu-fixed"
   dir="ltr"
@@ -382,7 +382,7 @@
             </div>
             <hr />
             <div class="container">
-              <div style="row">
+              <div >
                 <!-- Dropdown Button 1 -->
                 <button
                   class="btn btn-primary bg-info mb-4 m-1 dropdown-toggle"
@@ -397,15 +397,16 @@
                 </button>
                 {%if list_clients%}
                 <div class="dropdown-menu" aria-labelledby="dropdownButton1">
-                  <button class="dropdown-item btn btn-outline-info" onclick="stock('all')">
-                    All Stock
-                  </button>
-                  {%for client in list_clients%}
-                  <button class="dropdown-item btn btn-outline-info" onclick="stock('{{client.client.name}}')">
-                    {{client.client.name}}
-                  </button>
-                  {%endfor%}
-                </div>
+                  <a class="dropdown-item btn btn-outline-info" href='{% url "current-stocks-list" %}'>
+                      All Stock
+                  </a>
+                  {% for client in list_clients %}
+                      <a class="dropdown-item btn btn-outline-info"
+                              href='{% url "current-stocks-list"%}?client_id={{ client.client.id }}'>
+                          {{ client.client.name }}
+                      </a>
+                  {% endfor %}
+              </div>
                 {%endif%}
 
                 <!-- Dropdown Button 2 -->

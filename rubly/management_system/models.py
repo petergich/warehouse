@@ -14,7 +14,7 @@ class Description(models.Model):
     Type = models.CharField(max_length=50)
     Packaging = models.CharField(max_length=50)
     def __str__(self):
-        return self.Description
+        return str(self.Description)
 
 class Client(models.Model):
     name = models.CharField(unique=True,max_length=50)

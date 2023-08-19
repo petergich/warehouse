@@ -1,6 +1,12 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated 
+from .serializers import GoodsReceivedSerializer
 from django.contrib import messages, auth
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
@@ -14,6 +20,7 @@ from django.core.serializers import serialize
 import time
 import datetime
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
 
 
 def Login(request):
@@ -148,16 +155,16 @@ def Logout(request):
     return redirect('Login')
 
 # Dashboard-date Module
-@login_required(login_url="Login")
-def stock(request):
-    if request.GET['selected']=="all":
-         clients=Client.objects.all()
-         recieved=Goods_received.objects.all()
-         return render(request,"stock.html")
-    else:
-        clients=Client.objects.all()
+# @login_required(login_url="Login")
+# def stock(request):
+#     if request.GET['selected']=="all":
+#          clients=Client.objects.all()
+#          recieved=Goods_received.objects.all()
+#          return render(request,"stock.html")
+#     else:
+#         clients=Client.objects.all()
 
-        return render(request,"stock.html")
+#         return render(request,"stock.html")
 @login_required(login_url="Login")
 def dashboardstock(request):
     if request.method=="GET":
@@ -207,3 +214,30 @@ def dashboardstock(request):
                     respdict.append(sublist)
             text="Closing Stock for:"+str(date)
             return render(request, 'dashboard.html',{'respdict': respdict,"type":text})
+        
+# def current_stocks_list(request):
+#     client_id = request.GET.get('client_id')
+#     if client_id:
+#         queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
+#     else:
+#         queryset = Goods_received.objects.all()
+
+#     # Serialize your queryset using the GoodsReceivedSerializer
+#     serializer = GoodsReceivedSerializer(queryset, many=True)
+
+#     url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
+
+#     return render(request, 'stock.html', {'current_stocks': serializer.data, 'current_stocks_url': url})
+
+def current_stocks_list(request):
+    client_id = request.GET.get('client_id')
+    if client_id:
+        queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
+    else:
+        queryset = Goods_received.objects.all()
+
+    serializer = GoodsReceivedSerializer(queryset, many=True)
+
+    url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
+
+    return render(request, 'stock.html', {'current_stocks': serializer.data, 'current_stocks_url': url})

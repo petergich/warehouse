@@ -1,13 +1,15 @@
 from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
+from django.conf.urls import include
+from rest_framework.routers import DefaultRouter
 from . import views
+
 
 urlpatterns = [
     path("",views.Login,name="Login"),
+    path('current-stocks-list/', views.current_stocks_list, name='current-stocks-list'),
     path("dashboard",views.Dashboard,name="dashboard"),
     path("issue",views.issue,name="Issue"),
     path("capex",views.capex,name="Capex"),
-    path("stock",views.stock,name="Stock"),
     path("good",views.good,name="good"),
     path("selected",views.projectGoods,name="selected"),
     path("check",views.check,name="Check"),
