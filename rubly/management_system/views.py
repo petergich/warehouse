@@ -215,19 +215,7 @@ def dashboardstock(request):
             text="Closing Stock for:"+str(date)
             return render(request, 'dashboard.html',{'respdict': respdict,"type":text})
         
-# def current_stocks_list(request):
-#     client_id = request.GET.get('client_id')
-#     if client_id:
-#         queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
-#     else:
-#         queryset = Goods_received.objects.all()
 
-#     # Serialize your queryset using the GoodsReceivedSerializer
-#     serializer = GoodsReceivedSerializer(queryset, many=True)
-
-#     url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
-
-#     return render(request, 'stock.html', {'current_stocks': serializer.data, 'current_stocks_url': url})
 
 def current_stocks_list(request):
     client_id = request.GET.get('client_id')
