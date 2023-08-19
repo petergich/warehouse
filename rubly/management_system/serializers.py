@@ -9,4 +9,4 @@ class GoodsReceivedSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Goods_received
-        fields = ['id', 'price', 'Quantity', 'description', 'date', 'remaining', 'client_name','Purchase_Order', 'project_name']
+        fields = ['id', 'price', 'Quantity', 'description', 'date', 'remaining', 'client_name', 'project_name']
