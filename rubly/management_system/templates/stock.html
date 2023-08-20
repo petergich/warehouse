@@ -289,7 +289,7 @@
           </nav>
 
           <!-- Page content goes here -->
-         
+         <div class="container overflow-scroll">
           <table class="table">
             <thead>
                 <tr class="bg-info">
@@ -314,20 +314,20 @@
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Packaging }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Type }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.remaining }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="table-danger"></td>
+                    <td class="table-danger"></td>
+                    <td class="table-danger"></td>
+                    <td class="table-danger"></td>
                     
                 </tr>
                     {% elif stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
                     <tr class="subrow table-secondary">
-                        <td>__</td> 
-                        <td>__</td>
-                        <td>__</td>
-                        <td>__</td>  
-                        <td>__</td>
-                        <td>{{ stock.price }}</td>
+                        <td class="table-danger">__</td> 
+                        <td class="table-danger">__</td>
+                        <td class="table-danger">__</td>
+                        <td class="table-danger">__</td>  
+                        <td class="table-danger">__</td>
+                        <td >{{ stock.price }}</td>
                         <td>{{ stock.remaining }}</td>
                         <td>{{ stock.client_name }}</td>
                         <td>{{ stock.project_name }}</td>
@@ -337,6 +337,7 @@
                 {% endfor %}
             </tbody>
         </table>
+      </div>
         
         
      
