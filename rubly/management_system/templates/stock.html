@@ -329,9 +329,9 @@
                 {% for stock in current_stocks %}
                 {% if stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
                     <tr class="subrow table-secondary">
-                        <td class="table-danger">__</td>
-                        <td class="table-danger">__</td>  
-                        <td class="table-danger">__</td>
+                        <td class="table-success">__</td>
+                        <td class="table-success">__</td>  
+                        <td class="table-success">__</td>
                         <td >{{ stock.price }}</td>
                         <td>{{ stock.remaining }}</td>
                         <td>{{ stock.client_name }}</td>
