@@ -293,10 +293,8 @@
           <table class="table">
             <thead>
                 <tr class="bg-info">
-                    <th>S.No</th>
                     <th>Description</th>
                     <th>Packaging</th>
-                    <th>Type</th>
                     <th>Total Quantity</th>
                     <th>Price</th>
                     <th>Quantity</th>
@@ -306,14 +304,21 @@
             </thead>
             <tbody>
               {% for type in Typedes %}
+              <tr>
+                <td><h5 class="font-weight-bold">{{type.description__Type}}</h5></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
                 {% for gstock in grouped_stocks %}
                 {% if gstock.description__Type == type.description__Type %}
   
                 <tr class="table-info">
-                    <td rowspan="{{ gstock.rowspan }}">{{ forloop.counter }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Description }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Packaging }}</td>
-                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Type }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.remaining }}</td>
                     <td class="table-danger"></td>
                     <td class="table-danger"></td>
@@ -324,8 +329,6 @@
                 {% for stock in current_stocks %}
                 {% if stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
                     <tr class="subrow table-secondary">
-                        <td class="table-danger">__</td> 
-                        <td class="table-danger">__</td>
                         <td class="table-danger">__</td>
                         <td class="table-danger">__</td>  
                         <td class="table-danger">__</td>
