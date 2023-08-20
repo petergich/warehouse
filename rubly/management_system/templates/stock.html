@@ -289,34 +289,59 @@
           </nav>
 
           <!-- Page content goes here -->
+         
           <table class="table">
             <thead>
                 <tr class="bg-info">
-                    <th>ID</th>
+                    <th>S.No</th>
+                    <th>Description</th>
+                    <th>Packaging</th>
+                    <th>Total Quantity</th>
+                    <th>Total Remaining</th>
                     <th>Price</th>
                     <th>Quantity</th>
-                    <th>Description</th>
-                    <th>date</th>
                     <th>Remaining</th>
                     <th>Client Name</th>
                     <th>Project Name</th>
                 </tr>
             </thead>
             <tbody>
-                {% for stock in current_stocks %}
+                {% for gstock in grouped_stocks %}
                 <tr class="table-info">
-                    <td>{{ stock.id }}</td>
-                    <td>{{ stock.price }}</td>
-                    <td>{{ stock.Quantity }}</td>
-                    <td>{{ stock.description }}</td>
-                    <td>{{ stock.date }}</td>
-                    <td>{{ stock.remaining }}</td>
-                    <td>{{ stock.client_name }}</td>
-                    <td>{{ stock.project_name }}</td>
-\                </tr>
+                    <td rowspan="{{ gstock.rowspan }}">{{ forloop.counter }}</td>
+                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Description }}</td>
+                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Packaging }}</td>
+                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.Quantity }}</td>
+                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.remaining }}</td>
+                    <td rowspan="{{ gstock.rowspan }}"></td> 
+                    <td rowspan="{{ gstock.rowspan }}"></td> 
+                    <td rowspan="{{ gstock.rowspan }}"></td> 
+                    <td rowspan="{{ gstock.rowspan }}"></td> 
+                    <td rowspan="{{ gstock.rowspan }}"></td>
+                    
+                </tr>
+                {% for stock in current_stocks %}
+                    {% if stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
+                    <tr class="subrow table-secondary">
+                        <td>--</td> 
+                        <td>--</td>
+                        <td>--</td> 
+                        <td>--</td> 
+                        <td>--</td>
+                        <td>{{ stock.price }}</td>
+                        <td>{{ stock.Quantity }}</td>
+                        <td>{{ stock.remaining }}</td>
+                        <td>{{ stock.client_name }}</td>
+                        <td>{{ stock.project_name }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
+        
+        
+     
           
           <!-- Content wrapper -->
         </div>

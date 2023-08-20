@@ -18,6 +18,7 @@ from django.http import JsonResponse
 import os
 from django.core.serializers import serialize
 import time
+from django.db.models import Sum
 import datetime
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
@@ -223,9 +224,15 @@ def current_stocks_list(request):
         queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
     else:
         queryset = Goods_received.objects.all()
+    
+    grouped_stocks = queryset.values('description__Description', 'description__Packaging').annotate(
+        Quantity=Sum('Quantity'),
+        remaining=Sum('remaining'),
+    )
+    print(grouped_stocks)
 
     serializer = GoodsReceivedSerializer(queryset, many=True)
 
     url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
 
-    return render(request, 'stock.html', {'current_stocks': serializer.data, 'current_stocks_url': url})
+    return render(request, 'stock.html', {'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data, 'current_stocks_url': url})
