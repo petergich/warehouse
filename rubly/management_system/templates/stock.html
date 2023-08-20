@@ -305,11 +305,12 @@
                 </tr>
             </thead>
             <tbody>
+              {% for type in Typedes %}
                 {% for gstock in grouped_stocks %}
+                {% if gstock.description__Type == type.description__Type %}
+  
                 <tr class="table-info">
-                  {% for stock in current_stocks %}
-                  {% if forloop.first %}
-                    <td rowspan="{{ gstock.rowspan }}" colspan="{{stock.colspan}}">{{ forloop.counter }}</td>
+                    <td rowspan="{{ gstock.rowspan }}">{{ forloop.counter }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Description }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Packaging }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Type }}</td>
@@ -320,7 +321,8 @@
                     <td class="table-danger"></td>
                     
                 </tr>
-                    {% elif stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
+                {% for stock in current_stocks %}
+                {% if stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
                     <tr class="subrow table-secondary">
                         <td class="table-danger">__</td> 
                         <td class="table-danger">__</td>
@@ -333,6 +335,8 @@
                         <td>{{ stock.project_name }}</td>
                     </tr>
                     {% endif %}
+                {% endfor %}
+                {% endif %}
                 {% endfor %}
                 {% endfor %}
             </tbody>
