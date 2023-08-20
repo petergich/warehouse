@@ -225,11 +225,10 @@ def current_stocks_list(request):
     else:
         queryset = Goods_received.objects.all()
     
-    grouped_stocks = queryset.values('description__Description', 'description__Packaging').annotate(
+    grouped_stocks = queryset.values('description__Description', 'description__Packaging','description__Type').annotate(
         Quantity=Sum('Quantity'),
         remaining=Sum('remaining'),
     )
-    print(grouped_stocks)
 
     serializer = GoodsReceivedSerializer(queryset, many=True)
 

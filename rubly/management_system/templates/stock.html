@@ -296,10 +296,10 @@
                     <th>S.No</th>
                     <th>Description</th>
                     <th>Packaging</th>
+                    <th>Type</th>
                     <th>Total Quantity</th>
-                    <th>Total Remaining</th>
                     <th>Price</th>
-                    <th>Remaining</th>
+                    <th>Quantity</th>
                     <th>Client Name</th>
                     <th>Project Name</th>
                 </tr>
@@ -309,25 +309,25 @@
                 <tr class="table-info">
                   {% for stock in current_stocks %}
                   {% if forloop.first %}
-                    <td rowspan="{{ gstock.rowspan }}">{{ forloop.counter }}</td>
+                    <td rowspan="{{ gstock.rowspan }}" colspan="{{stock.colspan}}">{{ forloop.counter }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Description }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Packaging }}</td>
+                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Type }}</td>
                     <td rowspan="{{ gstock.rowspan }}">{{ gstock.remaining }}</td>
-                    <td>{{ stock.price }}</td>
-                        <td>{{ stock.Quantity }}</td>
-                        <td>{{ stock.remaining }}</td>
-                        <td>{{ stock.client_name }}</td>
-                        <td>{{ stock.project_name }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     
                 </tr>
                     {% elif stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
                     <tr class="subrow table-secondary">
                         <td>__</td> 
                         <td>__</td>
+                        <td>__</td>
                         <td>__</td>  
                         <td>__</td>
                         <td>{{ stock.price }}</td>
-                        <td>{{ stock.Quantity }}</td>
                         <td>{{ stock.remaining }}</td>
                         <td>{{ stock.client_name }}</td>
                         <td>{{ stock.project_name }}</td>
