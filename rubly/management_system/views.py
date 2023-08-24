@@ -299,12 +299,9 @@ def current_stocks_list(request):
             client=F('Purchase_Order__project_type__client'),
             description_type=F('description__Type__name')
         ).distinct()
-        print(grouped_stocks)
         sgrouped_stocks = queryset.values('description__Type__name').annotate().distinct() # Check if type is used to group stock
         serializer = GoodsReceivedSerializer(queryset, many=True)
-        print(serializer.data)
         url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
-        print(grouped_stocks)
         return render(request, 'stock.html', {'Typedes':sgrouped_stocks,'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data,"clients":clients, 'current_stocks_url': url})
     else:
         queryset = Goods_received.objects.all()
