@@ -291,12 +291,12 @@ def dashboardstock(request):
 def current_stocks_list(request):
     client_id = request.GET.get('client_id')
     if client_id:
-        queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
+        queryset = Goods_received.objects.filter()
         clients=Client.objects.filter(id=client_id)
         grouped_stocks = queryset.values('description__Description').annotate(
             Quantity=Sum('Quantity'),
             remaining=Sum('remaining'),
-            client=F('Purchase_Order__Project_Type__client'),
+            client=F('Purchase_Order__project_type__client'),
             description_type=F('description__Type__name')
         ).distinct()
         print(grouped_stocks)
