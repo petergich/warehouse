@@ -287,10 +287,10 @@
           <!-- Page content goes here -->
           <div class="container m-3 overflow-scroll " style="max-width: 90%;max-height:30vh;">
             <div>
-              <h3>{{client}}</h3>
+              <h3>Client:  <span style="color:green">{{client}}<hr></span></h3>
             </div>
             <div>
-              <h3>{{project}}</h3>
+              <h3>Project: {{project}}</h3>
             </div>
             <hr />
             <div class="card " style="max-height:30vh">
@@ -307,7 +307,7 @@
                 </thead>
                 <tbody>
                   {% if goods %} {% for good in goods %} {% if forloop.first%}
-                  <tr class="table-info">
+                  <tr class="table-info mrows" onclick="rowClick('{{good.Purchase_Order.purchase_ID}}')">
                     <td>{{description.Type}}</td>
                     <td>{{description.Description}}</td>
                     <td>{{description.Packaging}}</td>
@@ -316,7 +316,7 @@
                     <td id="{{good.Purchase_Order.purchase_ID}}">{{good.remaining}}</td>
                   </tr>
                   {% else %}
-                  <tr class="table-info">
+                  <tr class="table-info mrows" value={{good.Purchase_Order.purchase_ID}}>
                     <td>__</td>
                     <td>__</td>
                     <td>__</td>

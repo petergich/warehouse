@@ -1,16 +1,8 @@
 
 var tables = document.getElementsByTagName('table');
-
-// Loop through each table
-for (var i = 0; i < tables.length; i++){
-    // Get the number of rows in the table
-    var rowCount = tables[i].rows.length;
-    // If the table has only one row, remove the table
-    if (rowCount === 1) {
-        tables[i].remove();
-    }
+function rowClick(row){
+    alert(row)
 }
-
 
 function listGoods(client,project){
     const url = new URL('check', window.location.origin);
