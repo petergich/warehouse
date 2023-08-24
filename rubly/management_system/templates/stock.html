@@ -167,19 +167,14 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{%url 'dashboard'%}" class="menu-link card">
+              <a href="{%url 'dashboard'%}" class="menu-link bg-success card card">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Home</div>
               </a>
             </li>
             <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              <li class="menu-item active">
-                <a href="{% url 'Logout' %}" class="menu-link card bg-success">
-                  <i class="menu-icon tf-icons bx bx-box"></i>
-                  <div data-i18n="Analytics">Logout</div>
-                </a>
-              </li>
+              
               <li class="menu-item active">
                 <a href="{% url 'Issue' %}" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-box"></i>
@@ -281,7 +276,9 @@
                     <a class="nav-link" href="#">Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a href="{% url 'Logout' %}" class="nav-link card bg-primary">
+                      <div data-i18n="Analytics">Logout</div>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -289,66 +286,66 @@
           </nav>
 
           <!-- Page content goes here -->
-         <div class="container overflow-scroll">
-          <table class="table">
-            <thead>
+          <div class="m-5">
+            {% for client in clients%}
+            <a  href='{% url "current-stocks-list"%}?client_id={{client.id }}'>
+            <h2 style="color:green" >{{client.name}}<hr></h2></a>
+            {% for type in Typedes %} 
+            <div class="types">
+            <h4 class="font-weight-bold align-self-center">
+              TYPE:{{ type.description__Type__name}}
+            </h4>
+            <table class="table">
+              <thead>
                 <tr class="bg-info">
-                    <th>Description</th>
-                    <th>Packaging</th>
-                    <th>Total Quantity</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Client Name</th>
-                    <th>Project Name</th>
+                  <th>Description</th>
+                  <th>Packaging</th>
+                  <th>Total Remaining</th>
+                  <th>Purchase Order</th>
+                  <th>Price</th>
+                  <th>Remaining</th>
+                  <th>Project Type</th>
                 </tr>
-            </thead>
-            <tbody>
-              {% for type in Typedes %}
-              <tr>
-                <td><h5 class="font-weight-bold">{{type.description__Type}}</h5></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-                {% for gstock in grouped_stocks %}
-                {% if gstock.description__Type == type.description__Type %}
-  
-                <tr class="table-info">
-                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Description }}</td>
-                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.description__Packaging }}</td>
-                    <td rowspan="{{ gstock.rowspan }}">{{ gstock.remaining }}</td>
-                    <th >Price</th>
-                    <th >Quantity</th>
-                    <th >Client Name</th>
-                    <th >Project Name</th>
-                    
+              </thead>
+              <tbody>
+                {% for gstock in grouped_stocks %}{% if gstock.description_type == type.description__Type__name and gstock.client == client.id%}                
+                  <tr class="table-info">
+                  <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">
+                    {{ gstock.description__Description }}
+                  </td>
+                  <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">
+                    {{ gstock.description__Packaging }}
+                  </td>
+                  <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">{{ gstock.remaining }}</td>
+                  <td class="font-weight-bold">Purchase Order</td>
+                  <td class="font-weight-bold">Price</td>
+                  <td class="font-weight-bold">Remaining</td>
+                  <td class="font-weight-bold">Project Type</td>
                 </tr>
+                
                 {% for stock in current_stocks %}
-                {% if stock.description == gstock.description__Description and stock.packaging == gstock.description__Packaging %}
-                    <tr class="subrow table-secondary">
-                        <td class="table-danger">__</td>
-                        <td class="table-danger">__</td>  
-                        <td class="table-danger">__</td>
-                        <td >{{ stock.price }}</td>
-                        <td>{{ stock.remaining }}</td>
-                        <td>{{ stock.client_name }}</td>
-                        <td>{{ stock.project_name }}</td>
-                    </tr>
-                    {% endif %}
-                {% endfor %}
+                  {% if stock.description == gstock.description__Description and stock.client_name == client.name%}
+                <tr class="subrow table-secondary">
+                  <td>__</td>
+                  <td>__</td>
+                  <td>__</td>
+                  <td>{{stock.stock_po}}</td>
+                  <td>{{ stock.stock_price }}</td>
+                  <td>{{ stock.stock_remaining }}</td>
+                  <td>{{ stock.project_name }}</td>
+                </tr>
                 {% endif %}
+                {% endfor %} 
+                {% endif%}
                 {% endfor %}
-                {% endfor %}
-            </tbody>
-        </table>
-      </div>
-        
-        
-     
-          
+              </tbody>
+            </table>
+            <hr />
+          </div>
+            {% endfor%}
+            {% endfor%}
+          </div>
+
           <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->

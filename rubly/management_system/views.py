@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+from django.db.models import F
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -82,7 +83,14 @@ def check(request):
         proje=request.GET['project']
         project=Project_Type.objects.get(client__name=client,name=proje)
         #get all goods where the project type is the one selected
-        goods=Goods_received.objects.filter(Project_Type=project)
+        pos=Purchase_Order.objects.filter(project_type=project)
+        #get all goods where the project type is the one selected
+        all_goods=Goods_received.objects.all()
+        goods=[]
+        for po in pos:
+            for good in all_goods:
+                if good not in goods and good.Purchase_Order == po:
+                    goods.append(good)
         des=[]
         #looping through the goods and adding their description in the list
         for good in goods:
@@ -108,8 +116,14 @@ def projectGoods(request):
         client=request.GET['client']
         proje=request.GET['project']
         project=Project_Type.objects.get(client__name=client,name=proje)
+        pos=Purchase_Order.objects.filter(project_type=project)
         #get all goods where the project type is the one selected
-        goods=Goods_received.objects.filter(Project_Type=project)
+        all_goods=Goods_received.objects.all()
+        goods=[]
+        for po in pos:
+            for good in all_goods:
+                if good not in goods and good.Purchase_Order == po:
+                    goods.append(good)
         des=[]
         #looping through the goods and adding their description in the list
         for good in goods:
@@ -132,7 +146,7 @@ def good(request):
         des=request.GET['description']
         client=request.GET['client']
         proj=request.GET['project']
-        goods=Goods_received.objects.filter(Project_Type__name=proj,Project_Type__client__name=client,description__Description=des,remaining__gt=0)
+        goods=Goods_received.objects.filter(Purchase_Order__project_type__name=proj,description__Description=des,remaining__gt=0)
         desc=Description.objects.get(Description=des)
         Quantity=0
         for good in goods:
@@ -143,12 +157,68 @@ def good(request):
         return render(request,"good.html",{"goods":goods,"description":desc,"quantity":Quantity,"client":client,"project":proj,"goods_json":goods_json})
 @login_required(login_url="Login")
 def checkout(request):
+    now=datetime.datetime.now()
+    date=now.strftime("%Y-%m-%d")
     if request.GET['company']:
-        good=Goods_received.objects.get(Purchase_Order__purchase_ID=request.GET['po'],description__Description=request.GET['desc'],Project_Type__name=request.GET['project'],Project_Type__client__name=request.GET['client'])
-        
+        po=Purchase_Order.objects.get(purchase_ID=request.GET['po'],project_type__client__name=request.GET['client'])
+        good=Goods_received.objects.get(Purchase_Order__purchase_ID=request.GET['po'],description__Description=request.GET['desc'])
+        good.remaining=good.remaining-int(request.GET['quantity'])
+        material=Description.objects.get(Description=request.GET['desc'])
+        mgood=Goods_received.objects.get(Purchase_Order__purchase_ID=request.GET['po'],description=material,Purchase_Order=po)
+        issue=IssuanceExternal(date=date,good=mgood,company=request.GET['company'],Carpex=request.GET['capex'],Quantity=request.GET['quantity'],remaining=good.remaining)
+        try:
+            good.save()
+            issue.save()
+            return JsonResponse({"message":"Successfull"})
+        except:
+            return JsonResponse({"message":"An error occured"})
 @login_required(login_url="Login")
-def capex(request):    
-    return render(request,'capex.html')
+def capex(request):
+    issued=IssuanceExternal.objects.all()
+    clients=[]
+    pos=[]
+    types=[]
+    desc=[]
+    goods=[]
+    for iss in issued:
+        try:
+            recieved=iss.good
+        except:
+            return render(request,'capex.html',{"message":"There was an error in fetching the capexex"})
+        if recieved not in goods:
+            goods.append(recieved)
+        if recieved.Purchase_Order.project_type.client not in clients:
+            clients.append(recieved.Purchase_Order.project_type.client)
+        if iss.good.Purchase_Order not in pos:
+            pos.append(iss.good.Purchase_Order)
+        if iss.good.description.Type not in types:
+            types.append(iss.good.description.Type)
+        if iss.good.description not in desc:
+            desc.append(iss.good.description)
+    capexes=IssuanceExternal.objects.all()
+    objects=[]
+    for client in clients:
+        ob_pos=[]
+        for po in pos:
+            ob_types=[]
+            for stype in types:
+                ob_goods=[]
+                for good in goods:
+                    if good.Purchase_Order.project_type.client == client and good.description.Type == stype and good.Purchase_Order == po:
+                        ob_capexex=[]
+                        for capex in capexes:
+                            if capex.good == good and capex not in ob_capexex:
+                                ob_capexex.append(capex)
+                        if ob_capexex !=[]:
+                            sorted_capexex = sorted(ob_capexex, key=lambda c: c.remaining, reverse=True)
+                            ob_goods.append({"good":good,"capex":sorted_capexex})
+                if ob_goods !=[]:
+                    ob_types.append({"type":stype,"ob_goods":ob_goods})
+            if ob_types !=[]:
+                ob_pos.append({"po":po,"ob_types":ob_types})
+        if ob_pos !=[]:
+            objects.append({"client":client,"ob_pos":ob_pos})
+    return render(request,'capex.html',{"objects":objects})
 def Logout(request):
     if request.method == 'POST':
         auth.logout(request)
@@ -222,19 +292,37 @@ def current_stocks_list(request):
     client_id = request.GET.get('client_id')
     if client_id:
         queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
+        clients=Client.objects.filter(id=client_id)
+        grouped_stocks = queryset.values('description__Description').annotate(
+            Quantity=Sum('Quantity'),
+            remaining=Sum('remaining'),
+            client=F('Purchase_Order__Project_Type__client'),
+            description_type=F('description__Type__name')
+        ).distinct()
+        print(grouped_stocks)
+        sgrouped_stocks = queryset.values('description__Type__name').annotate().distinct() # Check if type is used to group stock
+        serializer = GoodsReceivedSerializer(queryset, many=True)
+        print(serializer.data)
+        url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
+        print(grouped_stocks)
+        return render(request, 'stock.html', {'Typedes':sgrouped_stocks,'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data,"clients":clients, 'current_stocks_url': url})
     else:
         queryset = Goods_received.objects.all()
-    
-    grouped_stocks = queryset.values('description__Description', 'description__Packaging','description__Type').annotate(
-        Quantity=Sum('Quantity'),
-        remaining=Sum('remaining'),
-    ).distinct()
-    
-    sgrouped_stocks = queryset.values('description__Type').annotate().distinct() # Check if type is used to group stocks
-    print (sgrouped_stocks) # Verify
-
-    serializer = GoodsReceivedSerializer(queryset, many=True)
-
-    url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
-
-    return render(request, 'stock.html', {'Typedes':sgrouped_stocks,'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data, 'current_stocks_url': url})
+        grouped_stocks = queryset.values('description__Description', 'description__Packaging','description__Type__name','Purchase_Order__project_type__client').annotate(
+            Quantity=Sum('Quantity'),
+            remaining=Sum('remaining'),
+            client=F('Purchase_Order__project_type__client'),
+            description_type=F('description__Type__name')
+        ).distinct()
+        
+        sgrouped_stocks = queryset.values('description__Type__name').annotate().distinct() # Check if type is used to group stock
+        serializer = GoodsReceivedSerializer(queryset, many=True)
+        url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
+        data=serializer.data
+        clients=[]
+        cli=Client.objects.all()
+        for dat in data:
+            for c in cli:
+                if c not in clients and c.name == dat['client_name']:
+                    clients.append(c)
+        return render(request, 'stock.html', {'Typedes':sgrouped_stocks,'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data,"clients":clients, 'current_stocks_url': url})

@@ -167,19 +167,14 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{%url 'dashboard'%}" class="menu-link card">
+              <a href="{%url 'dashboard'%}" class="menu-link bg-success card">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Home</div>
               </a>
             </li>
             <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              <li class="menu-item active">
-                <a href="{% url 'Logout' %}" class="menu-link card bg-success">
-                  <i class="menu-icon tf-icons bx bx-box"></i>
-                  <div data-i18n="Analytics">Logout</div>
-                </a>
-              </li>
+             
               <li class="menu-item active">
                 <a href="{% url 'Issue' %}" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-box"></i>
@@ -281,7 +276,9 @@
                     <a class="nav-link" href="#">Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a href="{% url 'Logout' %}" class="nav-link card bg-primary">
+                      <div data-i18n="Analytics">Logout</div>
+                    </a>
                   </li>
                 </ul>
               </div>

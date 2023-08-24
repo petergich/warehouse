@@ -167,19 +167,14 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{%url 'dashboard'%}" class="menu-link card">
+              <a href="{%url 'dashboard'%}" class="menu-link bg-success  card">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Home</div>
               </a>
             </li>
             <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              <li class="menu-item active">
-                <a href="{% url 'Logout' %}" class="menu-link card bg-success">
-                  <i class="menu-icon tf-icons bx bx-box"></i>
-                  <div data-i18n="Analytics">Logout</div>
-                </a>
-              </li>
+             
               <li class="menu-item active">
                 <a href="{% url 'Issue' %}" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-box"></i>
@@ -281,7 +276,9 @@
                     <a class="nav-link" href="#">Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a href="{% url 'Logout' %}" class="nav-link card bg-primary">
+                      <div data-i18n="Analytics">Logout</div>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -289,7 +286,65 @@
           </nav>
 
           <!-- Page content goes here -->
-          
+          <div class="m-5">
+            {% for client in objects%}
+
+            
+            <h2 style="color:green" onclick="client()">{{client.client.name}}<hr></h2>
+            {% for po in client.ob_pos%}
+            <h4><span style="color:black">PO: </span>{{po.po.purchase_ID}}</h4>
+            <table class="table ">
+              <thead >
+                <tr class="bg-info">
+                  <th>Type</th>
+                  <th>Material</th>
+                  <th>Packaging</th>
+                  <th>Recieved</th>
+                  <th>Capex</th>
+                  <th>Company</th>
+                  <th>Quantity</th>
+                  <th>Remaining</th>
+                  <th>Date</th>
+                <tr>
+              </thead>
+              <tbody>
+                {% for type in po.ob_types%}
+                {% for good in type.ob_goods%}
+                {% for iss in good.capex%}  
+                {% if forloop.first%}     
+                <tr class="">
+                  <td>{{type.type.name}}</td>
+                  <td>{{good.good.description.Description}}</td>
+                  <td>{{good.good.description.Packaging}}</td>
+                  <td>{{good.good.Quantity}}</td>
+                  <td>{{iss.Carpex}}</td>
+                  <td>{{iss.company}}</td>
+                  <td>{{iss.Quantity}}</td>
+                  <td>{{iss.remaining}}</td>
+                  <td>{{iss.date}}</td>
+                </tr>
+                {% else%}
+                <tr class="">
+                  <td>__</td>
+                  <td>__</td>
+                  <td>__</td>
+                  <td>__</td>
+                  <td>{{iss.Carpex}}</td>
+                  <td>{{iss.company}}</td>
+                  <td>{{iss.Quantity}}</td>
+                  <td>{{iss.remaining}}</td>
+                  <td>{{iss.date}}</td>
+                </tr>
+                {% endif%}
+                {% endfor%}
+                {% endfor %}
+                {% endfor%}
+              </tbody>
+            </table>
+            <hr /><br>
+            {% endfor%}
+            {% endfor%}
+          </div>
           <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->
@@ -301,6 +356,10 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+    {% if message%}
+
+    <script> alert('{{ message|escapejs }}')</script>
+    {% endif%}
     <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.js' %}"></script>

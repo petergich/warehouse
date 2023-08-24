@@ -312,8 +312,8 @@
                     <td>{{description.Description}}</td>
                     <td>{{description.Packaging}}</td>
                     <td id="quantityvalue">{{quantity}}</td>
-                    <td>{{good.Purchase_Order}}</td>
-                    <td id="{{good.Purchase_Order}}">{{good.remaining}}</td>
+                    <td>{{good.Purchase_Order.purchase_ID}}</td>
+                    <td id="{{good.Purchase_Order.purchase_ID}}">{{good.remaining}}</td>
                   </tr>
                   {% else %}
                   <tr class="table-info">
@@ -321,8 +321,8 @@
                     <td>__</td>
                     <td>__</td>
                     <td>__</td>
-                    <td>{{good.Purchase_Order}}</td>
-                    <td id="{{good.Purchase_Order}}">{{good.remaining}}</td>
+                    <td>{{good.Purchase_Order.purchase_ID}}</td>
+                    <td id="{{good.Purchase_Order.purchase_ID}}">{{good.remaining}}</td>
                   </tr>
                   {% endif%} {% endfor %} {% endif %}
                 </tbody>
@@ -475,23 +475,22 @@ function submit(){
     url.searchParams.append('capex',capex.value);
     url.searchParams.append('po',po.value);
     url.searchParams.append('desc',desc);
+    url.searchParams.append('quantity',quantity.value);
     fetch(url)
         .then(response => response.json())
         .then(data => {
             // Process the received data
-            if(data==="found"){
-                
-            }
-            else{
-                alert(data)
-            }
+           alert(data.message)
+           location.reload();
         })
         .catch(error => {
             alert(error);
+            location.reload();
         });
       }
       else{
         alert("Cancelled")
+        location.reload();
       }
     }
 }
