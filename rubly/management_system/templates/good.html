@@ -307,7 +307,7 @@
                 </thead>
                 <tbody>
                   {% if goods %} {% for good in goods %} {% if forloop.first%}
-                  <tr class="table-info mrows" onclick="rowClick('{{good.Purchase_Order.purchase_ID}}')">
+                  <tr class="table-info mrows" onclick=" ('{{good.Purchase_Order.purchase_ID}}')">
                     <td>{{description.Type}}</td>
                     <td>{{description.Description}}</td>
                     <td>{{description.Packaging}}</td>
