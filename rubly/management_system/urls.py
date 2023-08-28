@@ -14,7 +14,7 @@ urlpatterns = [
     path("selected",views.projectGoods,name="selected"),
     path("check",views.check,name="Check"),
     path("checkout",views.checkout,name="checkout"),
-    path('dashboardstock/',views.dashboardstock,name = 'dashboardstock'),
+    path("postock",views.po_stock,name="postock"),
     path('logout',views.Logout,name='Logout'),    
 ]
 

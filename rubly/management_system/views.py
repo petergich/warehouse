@@ -291,38 +291,150 @@ def dashboardstock(request):
 def current_stocks_list(request):
     client_id = request.GET.get('client_id')
     if client_id:
-        queryset = Goods_received.objects.filter(Project_Type__client__id=client_id)
+        print(client_id)
+        allGoods=Goods_received.objects.filter(remaining__gt=0,Purchase_Order__project_type__client__id=client_id)
+        print(allGoods)
         clients=Client.objects.filter(id=client_id)
-        grouped_stocks = queryset.values('description__Description').annotate(
-            Quantity=Sum('Quantity'),
-            remaining=Sum('remaining'),
-            client=F('Purchase_Order__Project_Type__client'),
-            description_type=F('description__Type__name')
-        ).distinct()
-        print(grouped_stocks)
-        sgrouped_stocks = queryset.values('description__Type__name').annotate().distinct() # Check if type is used to group stock
-        serializer = GoodsReceivedSerializer(queryset, many=True)
-        print(serializer.data)
-        url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
-        print(grouped_stocks)
-        return render(request, 'stock.html', {'Typedes':sgrouped_stocks,'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data,"clients":clients, 'current_stocks_url': url})
+        types=[]
+        des=[]
+        for good in allGoods:
+            if good.description.Type not in types:
+                types.append(good.description.Type)
+            if good.description not in des:
+                des.append(good.description)
+        ob_clients=[]
+        for c in clients:
+            ob_types=[]
+            for t in types:
+                ob_desc=[]
+                for d in des:
+                    if d.Type == t:
+                        ob_goods=[]
+                        total=0
+                        for good in allGoods:
+                            if good.Purchase_Order.project_type.client == c and good.description == d:
+                                total+=good.remaining
+                                ob_goods.append(good)
+                        if ob_goods !=[]:
+                            ob_desc.append({"desc":d,"goods":ob_goods,"total":total})
+                if ob_desc !=[]:
+                    ob_types.append({"type":t,"desc":ob_desc})
+            if ob_types !=[]:
+                ob_clients.append({"client":c,"types":ob_types})
+       
+        return render(request, 'stock.html',{"objects":ob_clients})
     else:
-        queryset = Goods_received.objects.all()
-        grouped_stocks = queryset.values('description__Description', 'description__Packaging','description__Type__name','Purchase_Order__project_type__client').annotate(
-            Quantity=Sum('Quantity'),
-            remaining=Sum('remaining'),
-            client=F('Purchase_Order__project_type__client'),
-            description_type=F('description__Type__name')
-        ).distinct()
-        
-        sgrouped_stocks = queryset.values('description__Type__name').annotate().distinct() # Check if type is used to group stock
-        serializer = GoodsReceivedSerializer(queryset, many=True)
-        url = reverse('current-stocks-list') + f'?client_id={client_id}' if client_id else reverse('current-stocks-list')
-        data=serializer.data
+        allGoods=Goods_received.objects.filter(remaining__gt=0)
         clients=[]
-        cli=Client.objects.all()
-        for dat in data:
-            for c in cli:
-                if c not in clients and c.name == dat['client_name']:
-                    clients.append(c)
-        return render(request, 'stock.html', {'Typedes':sgrouped_stocks,'grouped_stocks': grouped_stocks, 'current_stocks': serializer.data,"clients":clients, 'current_stocks_url': url})
+        types=[]
+        des=[]
+        for good in allGoods:
+            if good.Purchase_Order.project_type.client not in clients:
+                clients.append(good.Purchase_Order.project_type.client)
+            if good.description.Type not in types:
+                types.append(good.description.Type)
+            if good.description not in des:
+                des.append(good.description)
+        ob_clients=[]
+        for c in clients:
+            ob_types=[]
+            for t in types:
+                ob_desc=[]
+                for d in des:
+                    if d.Type == t:
+                        ob_goods=[]
+                        total=0
+                        for good in allGoods:
+                            if good.Purchase_Order.project_type.client == c and good.description == d:
+                                total+=good.remaining
+                                ob_goods.append(good)
+                        if ob_goods !=[]:
+                            ob_desc.append({"desc":d,"goods":ob_goods,"total":total})
+                if ob_desc !=[]:
+                    ob_types.append({"type":t,"desc":ob_desc})
+            if ob_types !=[]:
+                ob_clients.append({"client":c,"types":ob_types})
+        return render(request, 'stock.html',{"objects":ob_clients})
+def po_stock(request):
+    po=request.GET.get("po_id")
+    client_id=request.GET.get("client_id")
+    proj_id=request.GET.get("proj_id")
+    allGoods=Goods_received.objects.filter(remaining__gt=0)
+    clients=[]
+    proj_types=[]
+    pos=[]
+    types=[]
+    if po:
+        pos.append(Purchase_Order.objects.get(id=po))
+        print(pos)
+        des=[]
+        for good in allGoods:
+            if good.Purchase_Order.project_type not in proj_types:
+                proj_types.append(good.Purchase_Order.project_type)
+            if good.Purchase_Order.project_type.client not in clients:
+                clients.append(good.Purchase_Order.project_type.client)
+            if good.description.Type not in types:
+                types.append(good.description.Type)
+            if good.description not in des:
+                des.append(good.description)
+    if client_id:
+        des=[]
+        clients.append(Client.objects.get(id=client_id))
+        for good in allGoods:
+            if good.Purchase_Order.project_type not in proj_types:
+                proj_types.append(good.Purchase_Order.project_type)
+            if good.Purchase_Order not in pos:
+                pos.append(good.Purchase_Order)
+            if good.description.Type not in types:
+                types.append(good.description.Type)
+            if good.description not in des:
+                des.append(good.description)
+    if proj_id:
+        proj_types.append(Project_Type.objects.get(id=proj_id))
+        des=[]
+        for good in allGoods:
+            if good.Purchase_Order not in pos:
+                pos.append(good.Purchase_Order)
+            if good.Purchase_Order.project_type.client not in clients:
+                clients.append(good.Purchase_Order.project_type.client)
+            if good.description.Type not in types:
+                types.append(good.description.Type)
+            if good.description not in des:
+                des.append(good.description)
+    elif "po_id" not in request.GET and "proj_id" not in request.GET and 'client_id' not in request.GET:
+        des=[]
+        for good in allGoods:
+            if good.Purchase_Order.project_type not in proj_types:
+                proj_types.append(good.Purchase_Order.project_type)
+            if good.Purchase_Order not in pos:
+                pos.append(good.Purchase_Order)
+            if good.Purchase_Order.project_type.client not in clients:
+                clients.append(good.Purchase_Order.project_type.client)
+            if good.description.Type not in types:
+                types.append(good.description.Type)
+            if good.description not in des:
+                des.append(good.description)
+    ob_clients=[]
+    for c in clients:
+        ob_projects=[]
+        for proj in proj_types:
+            if proj.client == c:
+                ob_pos =[]
+                for po in pos:
+                    if po.project_type == proj:
+                        ob_types=[]
+                        for t in types:
+                            ob_goods =[]
+                            for good in allGoods:
+                                if good.Purchase_Order == po and good.description.Type == t:
+                                    ob_goods.append(good)
+                            if ob_goods!=[]:
+                                ob_types.append({"type":t,"goods":ob_goods})
+                        if ob_types !=[]:
+                            ob_pos.append({"po":po,"types":ob_types})
+                if ob_pos != []:
+                    ob_projects.append({"project":proj,"pos":ob_pos}) 
+        if ob_projects != []:
+            ob_clients.append({"client":c,"projects":ob_projects}) 
+    return render(request,"postock.html",{"objects":ob_clients})
+    

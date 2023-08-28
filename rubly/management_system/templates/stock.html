@@ -174,35 +174,34 @@
             </li>
             <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              
-              <li class="menu-item active">
-                <a href="{% url 'Issue' %}" class="menu-link">
+              <li class="menu-item active ">
+                <a href="{% url 'Issue' %}" class="menu-link bg-secondary">
                   <i class="menu-icon tf-icons bx bx-box"></i>
                   <div data-i18n="Analytics">Issue stocks</div>
                 </a>
               </li>
-              <li class="menu-item active">
+              <li class="menu-item active ">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/client/add/"
-                  class="menu-link"
+                  class="menu-link bg-info"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Add Clients</div>
                 </a>
               </li>
-              <li class="menu-item active">
+              <li class="menu-item active ">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/project_type/add/"
-                  class="menu-link"
+                  class="menu-link bg-info"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Add Project types</div>
                 </a>
               </li>
-              <li class="menu-item active">
+              <li class="menu-item active ">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/project/add/"
-                  class="menu-link"
+                  class="menu-link bg-info"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Add Project</div>
@@ -211,25 +210,25 @@
               <li class="menu-item active">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/description/add/"
-                  class="menu-link"
+                  class="menu-link bg-info"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Add description</div>
                 </a>
               </li>
-              <li class="menu-item active">
+              <li class="menu-item active ">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/purchase_order/add/"
-                  class="menu-link"
+                  class="menu-link bg-info"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Add PO</div>
                 </a>
               </li>
-              <li class="menu-item active">
+              <li class="menu-item active ">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/goods_received/add/"
-                  class="menu-link"
+                  class="menu-link bg-info"
                 >
                   <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                   <div data-i18n="Analytics">Add goods</div>
@@ -287,13 +286,13 @@
 
           <!-- Page content goes here -->
           <div class="m-5">
-            {% for client in clients%}
-            <a  href='{% url "current-stocks-list"%}?client_id={{client.id }}'>
-            <h2 style="color:green" >{{client.name}}<hr></h2></a>
-            {% for type in Typedes %} 
+            {% for client in objects%}
+            <a  href='{% url "current-stocks-list"%}?client_id={{client.client.id }}'>
+            <h2 style="color:green" >{{client.client.name}}<hr></h2></a>
+            {% for type in client.types %} 
             <div class="types">
             <h4 class="font-weight-bold align-self-center">
-              TYPE:{{ type.description__Type__name}}
+              TYPE:{{ type.type.name}}
             </h4>
             <table class="table">
               <thead>
@@ -308,35 +307,32 @@
                 </tr>
               </thead>
               <tbody>
-                {% for gstock in grouped_stocks %}{% if gstock.description_type == type.description__Type__name and gstock.client == client.id%}                
+                {% for desc in type.desc %}                              
                   <tr class="table-info">
                   <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">
-                    {{ gstock.description__Description }}
+                    {{ desc.desc.Description }}
                   </td>
-                  <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">
-                    {{ gstock.description__Packaging }}
+             <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">
+                    {{ desc.desc.Packaging }}
                   </td>
-                  <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">{{ gstock.remaining }}</td>
+                  <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">{{ desc.total }}</td>
                   <td class="font-weight-bold">Purchase Order</td>
                   <td class="font-weight-bold">Price</td>
                   <td class="font-weight-bold">Remaining</td>
                   <td class="font-weight-bold">Project Type</td>
                 </tr>
                 
-                {% for stock in current_stocks %}
-                  {% if stock.description == gstock.description__Description and stock.client_name == client.name%}
+                {% for stock in desc.goods %}
                 <tr class="subrow table-secondary">
                   <td>__</td>
                   <td>__</td>
                   <td>__</td>
-                  <td>{{stock.stock_po}}</td>
-                  <td>{{ stock.stock_price }}</td>
-                  <td>{{ stock.stock_remaining }}</td>
-                  <td>{{ stock.project_name }}</td>
+                  <td>{{stock.Purchase_Order.purchase_ID}}</td>
+                  <td>{{ stock.price }}</td>
+                  <td>{{ stock.remaining }}</td>
+                  <td>{{ stock.Purchase_Order.project_type.name}}</td>
                 </tr>
-                {% endif %}
-                {% endfor %} 
-                {% endif%}
+                {% endfor %}
                 {% endfor %}
               </tbody>
             </table>

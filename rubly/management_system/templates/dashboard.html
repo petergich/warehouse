@@ -424,22 +424,25 @@
                   id="dropdownMenu2"
                   aria-labelledby="dropdownButton2"
                 >
+                <a class="dropdown-item btn btn-outline-info" href='{% url "postock" %}'>
                   <button class="dropdown-item btn btn-outline-info">
                     All POs'
                   </button>
+                </a>
                   {%for po in purchase_orders%}
+                 <a href='{% url "postock"%}?po_id={{ client.client.id }}'>
                   <button class="dropdown-item btn btn-outline-info">
                     {{po}}
-                  </button>
+                  </button></a>
                   {%endfor%}
                 </div>
                 {%endif%}
+                <a href="{% url 'Capex'%}" style="color: white">
                 <button class="btn btn-primary bg-info mb-4 m-1" type="button">
-                  <a href="{% url 'Capex'%}" style="color: white">
+                  
                     <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                     Capex
-                  </a>
-                </button>
+                </button></a>
                 {% comment %}
                 <div
                   class="dropdown-menu"

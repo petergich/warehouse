@@ -150,7 +150,7 @@
                 </svg>
               </span>
               <span class="app-brand-text demo menu-text fw-bolder ms-2"
-                >inventory</span
+                >Warehouse</span
               >
             </a>
 
@@ -167,20 +167,23 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{%url 'dashboard'%}" class="menu-link bg-success card card">
+              <a
+                href="{%url 'dashboard'%}"
+                class="menu-link bg-success card card"
+              >
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Home</div>
               </a>
             </li>
             <ul class="menu-inner py-1">
               <!-- Dashboard -->
-              <li class="menu-item active ">
+              <li class="menu-item active">
                 <a href="{% url 'Issue' %}" class="menu-link bg-secondary">
                   <i class="menu-icon tf-icons bx bx-box"></i>
                   <div data-i18n="Analytics">Issue stocks</div>
                 </a>
               </li>
-              <li class="menu-item active ">
+              <li class="menu-item active">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/client/add/"
                   class="menu-link bg-info"
@@ -189,7 +192,7 @@
                   <div data-i18n="Analytics">Add Clients</div>
                 </a>
               </li>
-              <li class="menu-item active ">
+              <li class="menu-item active">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/project_type/add/"
                   class="menu-link bg-info"
@@ -198,7 +201,7 @@
                   <div data-i18n="Analytics">Add Project types</div>
                 </a>
               </li>
-              <li class="menu-item active ">
+              <li class="menu-item active">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/project/add/"
                   class="menu-link bg-info"
@@ -216,7 +219,7 @@
                   <div data-i18n="Analytics">Add description</div>
                 </a>
               </li>
-              <li class="menu-item active ">
+              <li class="menu-item active">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/purchase_order/add/"
                   class="menu-link bg-info"
@@ -225,7 +228,7 @@
                   <div data-i18n="Analytics">Add PO</div>
                 </a>
               </li>
-              <li class="menu-item active ">
+              <li class="menu-item active">
                 <a
                   href="http://127.0.0.1:8000/admin/management_system/goods_received/add/"
                   class="menu-link bg-info"
@@ -275,7 +278,10 @@
                     <a class="nav-link" href="#">Services</a>
                   </li>
                   <li class="nav-item">
-                    <a href="{% url 'Logout' %}" class="nav-link card bg-primary">
+                    <a
+                      href="{% url 'Logout' %}"
+                      class="nav-link card bg-primary"
+                    >
                       <div data-i18n="Analytics">Logout</div>
                     </a>
                   </li>
@@ -285,33 +291,67 @@
           </nav>
 
           <!-- Page content goes here -->
-          <div class="container">
-            {% if objects %}
-            {% for cli in objects %}
-            {% if cli.projects %}
-            <div class="container">
-              <h3 style="color:black;">{{cli.clients.name}}</h3>
-              <hr>
-              <div class="card1 mb-4">
-                {% for project in cli.projects %}
-                  <button
-                    data-toggle="modal"
-                    onclick="listGoods('{{cli.clients.name}}','{{project}}')"
-                    type="button"
-                    class=" btn  card2"
-                  >
-                    {{project}}
-                  </button>
-
-                  {% endfor %}
-              </div>
-             
-            </div>
-            {% endif %}
-            {% endfor%}
-            {% endif%}
+          <div class="m-5">
+            {% for client in objects%}
+            <a href='{% url "postock"%}?client_id={{client.client.id }}'>
+              <h2 style="color: green">
+                {{client.client.name}}
+                <hr /></h2
+            ></a>
+            {% for proj in client.projects%}
+            <a href='{% url "postock"%}?proj_id={{proj.project.id}}'>
+            <h4 class="font-weight-bold ">
+              Project Type:<span style="color:black">{{ proj.project.name}}</span>
+            </h4></a>
+            {% for po in proj.pos%}
+            <a href='{% url "postock"%}?po_id={{po.po.id }}'>
+            <h5 class="font-weight-bold ">
+              PO:<span style="color:blue">{{ po.po.purchase_ID}}</span>
+            </h5></a>
+            <table class="table">
+              <thead>
+                <tr class="bg-info">
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Packaging</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for type in po.types%} {% for good in type.goods%} {% if forloop.first%}
+                <tr class="table">
+                  <td>{{type.type.name}}</td>
+                  
+                  <td>{{good.description.Description}}</td>
+                  
+                  <td>{{good.description.Packaging}}</td>
+                 
+                  <td>{{good.remaining}}</td>
+                  
+                  <td>{{good.price}}</td>
+                  
+                </tr>
+                {% else%}
+                <tr class="table">
+                    <td>--</td>
+                    
+                    <td>{{good.description.Description}}</td>
+                    
+                    <td>{{good.description.Packaging}}</td>
+                   
+                    <td>{{good.remaining}}</td>
+                    
+                    <td>{{good.price}}</td>
+                    
+                  </tr>
+                {% endif%} {% endfor%} {% endfor%}
+              </tbody>
+            </table>
+            <hr />
+            {% endfor%} {% endfor%} {% endfor%}
           </div>
-          
+
           <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->
@@ -323,11 +363,6 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    {% if error%}
-    <script>
-      alert({{error}})
-    </script>
-    {% endif %}
     <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
