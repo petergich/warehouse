@@ -25,6 +25,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     />
+    
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -286,7 +290,12 @@
 
           <!-- Page content goes here -->
           <div id="home" class="">
-            <h4 class="ml m-3">Clients</h4>
+            {% comment %} <div>
+              <button style="background-color: green"class="btn btn-secondary m-3">
+                Techminds Warehouse
+              </button>
+            </div> {% endcomment %}
+            <h4 class="ml m-3"><hr>Clients</h4>
             <hr class="m-3" />
             <div class="card1 clients m-4" id="clients">
               {%if list_clients%} {%for client in list_clients%}
@@ -363,7 +372,7 @@
                         type="button"
                         class="btn btn-secondary"
                         data-dismiss="modal"
-                      ></button>
+                      >Close</button>
                     </div>
                   </div>
                 </div>
@@ -443,86 +452,9 @@
                     <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                     Capex
                 </button></a>
-                {% comment %}
-                <div
-                  class="dropdown-menu"
-                  id="dropdownMenu3"
-                  aria-labelledby="dropdownButton3"
-                >
-                  <button class="dropdown-item btn btn-outline-info">
-                    Option i
-                  </button>
-                  <button class="dropdown-item btn btn-outline-info">
-                    Option ii
-                  </button>
-                  <button class="dropdown-item btn btn-outline-info">
-                    Option ii
-                  </button>
-                </div>
-                {% endcomment %}
               </div>
             </div>
-            {% comment %}
-            <button
-              class="btn btn-primary bg-info mb-4 dropdown-toggle"
-              data-toggle="dropdown"
-              id="allStock"
-              type="button"
-            >
-              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-              View all Stock
-            </button>
-            {%if list_clients%}
-
-            <div class="dropdown-menu" data-toggle="modal">
-              <button type="button" class="dropdown-item btn btn-outline-info">
-                All stock
-              </button>
-              {%for clie in list_clients%}
-              <button type="button" class="dropdown-item btn btn-outline-info">
-                {{clie.client.name}}
-              </button>
-
-              {%endfor%}
-            </div>
-            {%endif%}
-            <button
-              class="btn btn-primary bg-info mb-4 dropdown-toggle"
-              data-toggle="dropdown"
-              id="poStock"
-              data-bs-target="#podropdown"
-              type="button"
-            >
-              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-              PO stock
-            </button>
-            {%if purchase_orders%}
-            <div
-              class="dropdown-menu"
-              id="podropdown"
-              data-toggle="modal"
-              aria-labelledby="poStock"
-            >
-              <button type="button" class="dropdown-item btn btn-outline-info">
-                {{po}}
-              </button>
-              {%for po in purchase_orders%}
-              <button type="button" class="dropdown-item btn btn-outline-info">
-                {{po}}
-              </button>
-
-              {%endfor%}
-            </div>
-            {%endif%}
-            <button
-              class="btn btn-primary bg-info mb-4 dropdown-toggle"
-              data-toggle="dropdown"
-              type="button"
-            >
-              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-              View Capex
-            </button>
-            {% endcomment %}
+            <canvas id="myChart" style="width:100%;max-width:40vw"></canvas>
           </div>
           <!-- Content wrapper -->
         </div>
@@ -535,6 +467,92 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+    <script>
+      const distinctColors = [
+  "Red",
+  "Green",
+  "Blue",
+  "Yellow",
+  "Purple",
+  "Orange",
+  "Pink",
+  "Brown",
+  "Teal",
+  "Cyan",
+  "Magenta",
+  "Indigo",
+  "Maroon",
+  "Olive",
+  "Navy",
+  "Turquoise",
+  "Lavender",
+  "Gold",
+  "Silver",
+  "Black",
+  "White",
+  "Beige",
+  "Gray",
+  "Coral",
+  "Slate",
+  "Plum",
+  "Violet",
+  "Ruby",
+  "Emerald",
+  "Sapphire",
+  "Lemon",
+  "Mint",
+  "Peach",
+  "Salmon",
+  "Mauve",
+  "Periwinkle",
+  "Lilac",
+  "Rose",
+  "Tangerine",
+  "Salmon",
+  "Sapphire",
+  "Coral",
+  "Jade",
+  "Cobalt",
+  "Mahogany",
+  "Peacock",
+  "Khaki",
+  "Vanilla",
+  "Olive",
+  "Ruby",
+  "Mint",
+  "Plum",
+  "Coral",
+  "Lavender",
+  "Sunflower"
+];
+
+      var ob = {{ objects| safe}}
+      var xValues = [];
+      var yValues = [];
+      var barColors = [];
+      for (var i = 0; i < ob.length; i++) {
+        xValues.push(ob[i].company)
+        yValues.push(ob[i].frequency)
+        barColors.push(distinctColors[i])
+    }
+      new Chart("myChart", {
+        type: "bar",
+        data: {
+          labels: xValues,
+          datasets: [{
+            backgroundColor: barColors,
+            data: yValues
+          }]
+        },
+        options: {
+          legend: {display: false},
+          title: {
+            display: true,
+            text: "Companies Frequencies"
+          }
+        }
+      });
+      </script>
     <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
@@ -560,83 +578,3 @@
     {% endcomment %}
   </body>
 </html>
-{% comment %} {%if respdict%}
-<h1>{{type}}</h1>
-
-<script>
-  window.onload = function () {
-    hide();
-  };
-</script>
-<table>
-  <tr class="bg-primary" style="color: white">
-    <th>Description</th>
-    <th>Price</th>
-    <th>Packaging</th>
-    <th>Quantity</th>
-    <th>Purchase Order</th>
-  </tr>
-  {% for product in respdict %}
-  <tr class="bg-light fw-bold" style="border-bottom: 1px solid">
-    {% for item in product %} {% for key, value in item.items %}
-    <td>{{ value }}</td>
-    {% endfor %} {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
-{%endif%} {% endcomment %} {% comment %}
-<div class="flex-grow-1 m-4 hide">
-  <div class="mb-4">
-    <div class="card modal-sm">
-      <div class="card-body">
-        <div class="card-title d-flex align-items-start">
-          <div class="avatar flex-xl-wrap">
-            <img
-              src="{% static 'img/icons/unicons/chart-success.png' %}"
-              alt="chart success"
-              class="rounded"
-            />
-          </div>
-          <div class="col-md-10">
-            <input
-              name="Opening_date"
-              class="date-field form-control opening_stock"
-              type="date"
-              value="date"
-              id="html5-date-input"
-            />
-          </div>
-        </div>
-        <span class="fw-semibold d-block mb-1">Opening stock Date</span>
-      </div>
-    </div>
-  </div>
-  <div class="mb-4">
-    <div class="card modal-sm">
-      <div class="card-body">
-        <div class="card-title d-flex align-items-start">
-          <div class="avatar flex-shrink-0">
-            <img
-              src="{% static 'img/icons/unicons/wallet-info.png' %}"
-              alt="Credit Card"
-              class="rounded"
-            />
-          </div>
-          <div class="col-md-10">
-            <input
-              name="Closing_date"
-              class="date-field form-control closing_stock"
-              type="date"
-              value="date"
-              id="html5-date-input"
-              placeholder=""
-            />
-          </div>
-        </div>
-        <span>Closing stock Date</span>
-      </div>
-    </div>
-  </div>
-            
-</div>
-{% endcomment %}

@@ -1,8 +1,5 @@
 
 var tables = document.getElementsByTagName('table');
-function rowClick(row){
-    alert(row)
-}
 
 function listGoods(client,project){
     const url = new URL('check', window.location.origin);

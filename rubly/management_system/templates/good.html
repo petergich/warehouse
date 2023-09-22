@@ -307,7 +307,7 @@
                 </thead>
                 <tbody>
                   {% if goods %} {% for good in goods %} {% if forloop.first%}
-                  <tr class="table-info mrows" onclick=" ('{{good.Purchase_Order.purchase_ID}}')">
+                  <tr class="table-info mrows" onclick="poclick('{{good.Purchase_Order.purchase_ID}}')">
                     <td>{{description.Type}}</td>
                     <td>{{description.Description}}</td>
                     <td>{{description.Packaging}}</td>
@@ -316,7 +316,7 @@
                     <td id="{{good.Purchase_Order.purchase_ID}}">{{good.remaining}}</td>
                   </tr>
                   {% else %}
-                  <tr class="table-info mrows" value={{good.Purchase_Order.purchase_ID}}>
+                  <tr class="table-info mrows"  onclick="poclick('{{good.Purchase_Order.purchase_ID}}')">
                     <td>__</td>
                     <td>__</td>
                     <td>__</td>
@@ -402,7 +402,11 @@
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script>
-  // Access the data passed from the Django view
+    function poclick(pov){
+      po=document.getElementById("po");
+      po.value=pov
+      validator()
+      }
   var myData = {{ goods_json | safe }};
   var orquantity = {{ quantity | safe }};
   var client = "{{ client | safe }}";
@@ -434,16 +438,16 @@
         original=dat.quantity;
        }
       });
-      if(quantity.value > 0 && quantity.value <= original ){
+      if(quantity.value > 0 && quantity.value <= original && quantity.value<=orquantity){
         field.innerHTML=original-quantity.value
-        total.innerHTML=total.innerHTML-quantity.value
+        total.innerHTML=orquantity-quantity.value
         qerror.innerHTML="";
         
           return true;
        
   
       }
-      if(quantity.value>original){
+      if(quantity.value>original ||quantity.value>orquantity ){
         field.innerHTML=original
         total.innerHTML=orquantity
         qerror.innerHTML="!Amount not available";

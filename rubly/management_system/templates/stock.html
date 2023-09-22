@@ -35,6 +35,7 @@
     />
 
     <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -291,9 +292,10 @@
             <h2 style="color:green" >{{client.client.name}}<hr></h2></a>
             {% for type in client.types %} 
             <div class="types">
+            <a  href='{% url "current-stocks-list"%}?type_id={{type.type.id }}'>
             <h4 class="font-weight-bold align-self-center">
               TYPE:{{ type.type.name}}
-            </h4>
+            </h4></a>
             <table class="table">
               <thead>
                 <tr class="bg-info">
@@ -301,9 +303,10 @@
                   <th>Packaging</th>
                   <th>Total Remaining</th>
                   <th>Purchase Order</th>
-                  <th>Price</th>
+                  <th>Unit Price</th>
                   <th>Remaining</th>
                   <th>Project Type</th>
+                  <th>Toatal Price</th>
                 </tr>
               </thead>
               <tbody>
@@ -317,20 +320,23 @@
                   </td>
                   <td rowspan="{{ gstock.rowspan }}"class="font-weight-bold">{{ desc.total }}</td>
                   <td class="font-weight-bold">Purchase Order</td>
-                  <td class="font-weight-bold">Price</td>
+                  <td class="font-weight-bold">Unit Price</td>
                   <td class="font-weight-bold">Remaining</td>
                   <td class="font-weight-bold">Project Type</td>
+                  <td class="font-weight-bold">Total Price</td>
+                  
                 </tr>
                 
                 {% for stock in desc.goods %}
-                <tr class="subrow table-secondary">
+                <tr class="subrow table">
                   <td>__</td>
                   <td>__</td>
                   <td>__</td>
-                  <td>{{stock.Purchase_Order.purchase_ID}}</td>
-                  <td>{{ stock.price }}</td>
-                  <td>{{ stock.remaining }}</td>
-                  <td>{{ stock.Purchase_Order.project_type.name}}</td>
+                  <td>{{stock.good.Purchase_Order.purchase_ID}}</td>
+                  <td>{{ stock.good.price }}</td>
+                  <td>{{ stock.good.remaining }}</td>
+                  <td>{{ stock.good.Purchase_Order.project_type.name}}</td>
+                  <td>{{stock.price}}</td>
                 </tr>
                 {% endfor %}
                 {% endfor %}
@@ -343,6 +349,12 @@
           </div>
 
           <!-- Content wrapper -->
+          <div class="buy-now position-fixed bottom-0 mb-2  align-self-center">
+            <button onclick="stockdownload()"class="btn btn-success buy-now">
+              <i class="fas fa-download"></i>
+               Download
+            </button>
+          </div>
         </div>
         <!-- / Layout page -->
       </div>
@@ -353,6 +365,45 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+    <script>
+      function stockdownload(){
+        var currentURL = window.location.href;
+        if(currentURL.includes("?")){
+        url=currentURL + "&download=Download"
+        }
+        else{
+          url=currentURL + "?download=Download"
+        }
+        window.location.href=url
+        handleDownloadComplete();
+      }
+      // Function to redirect the user to the previous URL
+function redirectToPreviousURL() {
+  window.location.href = document.referrer; // Redirect to the previous URL
+}
+
+// Function to handle the download completion event
+function handleDownloadComplete() {
+  // Add event listener to detect when the download is complete
+  // This is a simplified example; you may need more specific code depending on how you trigger the download
+  document.addEventListener('click', function (event) {
+      if (event.target.tagName === 'A') {
+          // Check if the clicked element is a link
+          var downloadURL = event.target.getAttribute('href');
+          if (downloadURL) {
+              // The clicked link is a download link
+              // You can add additional checks based on your specific implementation
+              // For simplicity, we assume that the click triggers a download
+              redirectToPreviousURL(); // Redirect after the download is complete
+          }
+      }
+  });
+}
+
+// Call the function to handle download completion
+
+
+    </script>
     <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
